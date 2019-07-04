@@ -17,8 +17,5 @@ public class CardService {
   }
 
 
-  public Collection<Card> provideCards() {
 
-    return cardRepository.getAllCards();
-  }
 }

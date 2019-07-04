@@ -24,12 +24,6 @@ public class CardsController {
   @Autowired
   private CardService service;
 
-  @GetMapping(CARDS_PATH)
-  @ApiOperation(value = "Получение всех карточек")
-  public ResponseEntity<Collection<Card>> listCards(
-          @ApiParam(value = "Идентификатор пользователя")
-          @RequestHeader("userId") String userId) {
-    Collection<Card> cards = service.provideCards(userId);
-    return ResponseEntity.ok(cards);
-  }
+
+
 }
