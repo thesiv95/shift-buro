@@ -8,11 +8,8 @@ public class Card {
     @ApiModelProperty(value = "ID карточки", required = true)
     private Integer id;
 
-    @ApiModelProperty(value = "Имя", required = true)
-    private String name;
-
-    @ApiModelProperty(value = "Телефон", required = true)
-    private String phone;
+    @ApiModelProperty(value = "ID пользователя", required = true)
+    private Integer userId;
 
     @ApiModelProperty(value = "Текст карточки", required = true)
     private String task;
@@ -23,10 +20,9 @@ public class Card {
     public Card(){
     }
 
-    public Card(Integer id, String name, String phone, String task, Boolean isActive){
+    public Card(Integer id, Integer userId, String task, Boolean isActive){
         this.id = id;
-        this.name = name;
-        this.phone = phone;
+        this.userId = userId;
         this.task = task;
         this.isActive = isActive;
     }
@@ -39,20 +35,12 @@ public class Card {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhone(){
-        return phone;
-    }
-
-    public void setPhone(String phone){
-        this.phone = phone;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getTask(){

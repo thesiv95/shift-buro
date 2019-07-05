@@ -1,5 +1,8 @@
 SELECT * FROM INFORMATION;
-ID  	NAME  	PHONE  	TASK  	IS_ACTIVE  
-1	Георгий	+79139432282	Могу сходить за хлебом	TRUE
-2	Марина	+79130002282	Прошу посидеть с ребенком	TRUE
-3	Иван	+79139221788	Могу погулять с собакой	TRUE
+ID  	USER_ID  TASK  	                    IS_ACTIVE
+1	    1  	     Могу сходить за хлебом	    TRUE
+2	    2		 Прошу посидеть с ребенком	TRUE
+3	    3	     Могу погулять с собакой	TRUE
+
+SELECT * FROM USERS;
+

@@ -1,10 +1,12 @@
 package ftc.shift.sample.repositories;
 
-import java.util.Collection;
+import ftc.shift.sample.models.Card;
+
+import java.util.List;
 
 /**
- * Интерфейс для получения данных по книгам
+ * Интерфейс для получения данных по карточкам с желаниями
  */
 public interface CardRepository {
-  Collection<Card> getAllCards();
+    List<Card> getAllCards();
 }

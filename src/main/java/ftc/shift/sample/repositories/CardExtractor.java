@@ -15,7 +15,7 @@ import java.util.Map;
 @Component
 public class CardExtractor implements ResultSetExtractor<List<Card>> {
     @Override
-    public List<Card> extractData(ResultSet rs) throws SQLException, DataAccessException {
+    public List<Card> extractData(ResultSet rs) throws SQLException {
         Map<String, Card> cards = new HashMap<>();
 
         while (rs.next()) {
@@ -23,8 +23,7 @@ public class CardExtractor implements ResultSetExtractor<List<Card>> {
 
             Card card = new Card();
             card.setId(rs.getInt("id"));
-            card.setName(rs.getString("name"));
-            card.setPhone(rs.getString("phone"));
+            card.setUserId(rs.getInt("userId"));
             card.setTask(rs.getString("task"));
             card.setIsActive(rs.getBoolean("is_active"));
 

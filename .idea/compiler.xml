@@ -4,8 +4,8 @@
     <bytecodeTargetLevel>
       <module name="backend.main" target="1.8" />
       <module name="backend.test" target="1.8" />
-      <module name="buro.main" target="1.8" />
-      <module name="buro.test" target="1.8" />
+      <module name="ftc.shift.backend.main" target="1.8" />
+      <module name="ftc.shift.backend.test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

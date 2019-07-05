@@ -5,13 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,7 +15,7 @@ import java.util.List;
  */
 @Repository
 @ConditionalOnProperty(name = "use.database", havingValue = "true")
-public class DatabaseCardRepository {
+public class DatabaseCardRepository implements CardRepository {
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -33,58 +29,88 @@ public class DatabaseCardRepository {
         // SQL запросы для создания таблиц
        ;
 
-        String createCardsTableSql = "create table BOOKS (" +
+        String createCardsTableSql = "create table INFORMATION (" +
                 "ID       INT," +
-                "NAME     VARCHAR(50)," +
-                "PHONE    VARCHAR(20)," +
-                "TASK     VARCHAR(255)" +
-                "IS_ACTIVE    BOOLEAN" +
+                "USER_ID  INT," +
+                "TASK     VARCHAR(255)," +
+                "IS_ACTIVE    BOOLEAN," +
+                "FOREIGN KEY (USER_ID) REFERENCES USERS(ID)" +
                 ");";
 
         String createUsersTableSql = "create table USERS (" +
-                "ID       INT," +
-                "NAME     VARCHAR(50);";
+                "ID       INT PRIMARY KEY," +
+                "NAME     VARCHAR(50);" +
+                "PHONE    VARCHAR(20)," +
+                "AGE      VARCHAR(20),"+
+                "CITY     VARCHAR(20)," +
+                "PIC_URL  VARCHAR(255)," +
+                "STATUS   VARCHAR(50);" +
+                "DESCRIPTION VARCHAR(255);" +
+                "BALANCE  INT";
 
-        jdbcTemplate.update(createCardsTableSql, new MapSqlParameterSource());
+
         jdbcTemplate.update(createUsersTableSql, new MapSqlParameterSource());
+        jdbcTemplate.update(createCardsTableSql, new MapSqlParameterSource());
 
         // Заполним таблицы тестовыми данными
-        new Card(1,	"Георгий",	"+79139432282",	"Могу сходить за хлебом", true);
+        new Card(1,	1,	"Могу сходить за хлебом", false);
 
-        new Card(2,	"Марина",	"+79130002282",	"Прошу посидеть с ребенком", true);
+        new Card(2,	2,	"Прошу посидеть с ребенком", false);
 
-        new Card(3,	"Иван",	"+79139221788",	"Могу погулять с собакой", true);
+        new Card(3,	3,	"Могу погулять с собакой", false);
 
-        new User(1, "Georgy");
-        new User(2, "Marina");
-        new User(3, "Ivan");
+        // НЕ ИМПОРТИРУЕТСЯ ПРАВИЛЬНО КЛАСС!!!!!!111!!!!
+        new ftc.shift.sample.models.User(1, "Georgy", "+79139432282", 50, 12, "s", "a", "a", "a");
+        new ftc.shift.sample.models.User(2, "Marina", "+79130002282", 50, 12, "s", "a", "a", "a");
+        new ftc.shift.sample.models.User(3, "Ivan", "+79139221788",50, 12, "s", "a", "a", "a");
 
     }
 
 
 
-
-    public void getAllCards() {
+    // Загрузить все карточки
+    public List<Card> getAllCards() {
         String sql = "select * from INFORMATION";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
 
         jdbcTemplate.query(sql, params, cardExtractor);
+        return null;
     }
 
 
-
+    // Пометить заявку как Выполнено/не выполнено
+    // по id пользователя
     public void updateStatus(Integer id, Boolean status) {
-        // 1) Обновляем информацию о книге
-        String updateCardStatusSql = "update BOOKS " +
-                "set STATUS =  " + status +
-                "where BOOK_ID = " + id;
+
+        String updateCardStatusSql = "UPDATE `information` SET `status`= "
+                + status + "WHERE `id` = " + id;
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", id)
                 .addValue("status", status);
 
         jdbcTemplate.update(updateCardStatusSql, params);
+
+    }
+
+    // Изменение баллов
+    private void changeBalance(int price, int recipientId, int donorId){
+        // Добавляем баллы к получателю
+        String addBallsSql = "UPDATE `users` SET `balance` " +
+                "= `balance` + " + price + " WHERE `id` = " + recipientId;
+
+        // Снимаем баллы у донора
+        String removeBallsSql = "UPDATE `users` SET `balance` " +
+                "= `balance` - " + price + " WHERE `id` = " + donorId;
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("price", price)
+                .addValue("recipientId", recipientId)
+                .addValue("donorId", donorId);
+
+        jdbcTemplate.update(addBallsSql, params);
+        jdbcTemplate.update(removeBallsSql, params);
 
     }
 }
