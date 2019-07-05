@@ -1,6 +1,7 @@
 package ftc.shift.sample.repositories;
 
 import ftc.shift.sample.models.Card;
+import ftc.shift.sample.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -11,7 +12,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
- * Реализиция, хранящая все данные в БД
+ * ВСЯ ЛОГИКА в приложении
  */
 @Repository
 @ConditionalOnProperty(name = "use.database", havingValue = "true")
@@ -23,30 +24,32 @@ public class DatabaseCardRepository implements CardRepository {
     @Autowired
     private CardExtractor cardExtractor;
 
+    @Autowired
+    private UserExtractor userExtractor;
+
     @PostConstruct
     public void initialize() {
         // Подразумевается, что H2 работает в in-memory режиме и таблицы необходимо создавать при каждом старте приложения
-        // SQL запросы для создания таблиц
-       ;
+        // SQL запросы для создания таблиц       ;
 
         String createCardsTableSql = "create table INFORMATION (" +
-                "ID       INT," +
-                "USER_ID  INT," +
-                "TASK     VARCHAR(255)," +
-                "IS_ACTIVE    BOOLEAN," +
+                "ID INT," +
+                "USER_ID INT," +
+                "TASK VARCHAR(255)," +
+                "IS_ACTIVE BOOLEAN," +
                 "FOREIGN KEY (USER_ID) REFERENCES USERS(ID)" +
                 ");";
 
         String createUsersTableSql = "create table USERS (" +
-                "ID       INT PRIMARY KEY," +
-                "NAME     VARCHAR(50);" +
-                "PHONE    VARCHAR(20)," +
-                "AGE      VARCHAR(20),"+
-                "CITY     VARCHAR(20)," +
-                "PIC_URL  VARCHAR(255)," +
-                "STATUS   VARCHAR(50);" +
-                "DESCRIPTION VARCHAR(255);" +
-                "BALANCE  INT";
+                "ID INT PRIMARY KEY," +
+                "NAME VARCHAR(50)," +
+                "PHONE VARCHAR(20)," +
+                "AGE VARCHAR(20),"+
+                "CITY VARCHAR(20)," +
+                "PIC_URL VARCHAR(255)," +
+                "STATUS VARCHAR(50)," +
+                "DESCRIPTION VARCHAR(255)," +
+                "BALANCE INT);";
 
 
         jdbcTemplate.update(createUsersTableSql, new MapSqlParameterSource());
@@ -59,7 +62,7 @@ public class DatabaseCardRepository implements CardRepository {
 
         new Card(3,	3,	"Могу погулять с собакой", false);
 
-        // НЕ ИМПОРТИРУЕТСЯ ПРАВИЛЬНО КЛАСС!!!!!!111!!!!
+
         new ftc.shift.sample.models.User(1, "Georgy", "+79139432282", 50, 12, "s", "a", "a", "a");
         new ftc.shift.sample.models.User(2, "Marina", "+79130002282", 50, 12, "s", "a", "a", "a");
         new ftc.shift.sample.models.User(3, "Ivan", "+79139221788",50, 12, "s", "a", "a", "a");
@@ -74,8 +77,18 @@ public class DatabaseCardRepository implements CardRepository {
 
         MapSqlParameterSource params = new MapSqlParameterSource();
 
-        jdbcTemplate.query(sql, params, cardExtractor);
-        return null;
+        List<Card> all = jdbcTemplate.query(sql, params, cardExtractor);
+        return all;
+    }
+
+    // Загрузить всех пользователей
+    public List<User> getAllUsers() {
+        String sql = "select * from USERS";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+
+        List<User> all = jdbcTemplate.query(sql, params, userExtractor);
+        return all;
     }
 
 

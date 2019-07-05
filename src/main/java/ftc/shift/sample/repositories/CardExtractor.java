@@ -1,7 +1,6 @@
 package ftc.shift.sample.repositories;
 
 import ftc.shift.sample.models.Card;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 

@@ -1,11 +1,14 @@
 package ftc.shift.sample.services;
 
+import ftc.shift.sample.models.Card;
 import ftc.shift.sample.repositories.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import ftc.shift.sample.repositories.CardRepository;
+
+import java.util.List;
+
+
 
 @Service
 public class CardService {
@@ -17,6 +20,9 @@ public class CardService {
     this.cardRepository = cardRepository;
   }
 
-
+  public List<Card> getAllCards(){
+    return this.cardRepository.getAllCards();
+  }
 
 }
+
