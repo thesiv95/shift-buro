@@ -33,7 +33,7 @@ public class DatabaseCardRepository {
         // SQL запросы для создания таблиц
        ;
 
-        String createBookTableSql = "create table BOOKS (" +
+        String createCardsTableSql = "create table BOOKS (" +
                 "ID       INT," +
                 "NAME     VARCHAR(50)," +
                 "PHONE    VARCHAR(20)," +
@@ -41,8 +41,12 @@ public class DatabaseCardRepository {
                 "IS_ACTIVE    BOOLEAN" +
                 ");";
 
+        String createUsersTableSql = "create table USERS (" +
+                "ID       INT," +
+                "NAME     VARCHAR(50);";
 
-        jdbcTemplate.update(createBookTableSql, new MapSqlParameterSource());
+        jdbcTemplate.update(createCardsTableSql, new MapSqlParameterSource());
+        jdbcTemplate.update(createUsersTableSql, new MapSqlParameterSource());
 
         // Заполним таблицы тестовыми данными
         new Card(1,	"Георгий",	"+79139432282",	"Могу сходить за хлебом", true);
@@ -50,10 +54,17 @@ public class DatabaseCardRepository {
         new Card(2,	"Марина",	"+79130002282",	"Прошу посидеть с ребенком", true);
 
         new Card(3,	"Иван",	"+79139221788",	"Могу погулять с собакой", true);
+
+        new User(1, "Georgy");
+        new User(2, "Marina");
+        new User(3, "Ivan");
+
     }
 
 
-    public void getAllBooks() {
+
+
+    public void getAllCards() {
         String sql = "select * from INFORMATION";
 
         MapSqlParameterSource params = new MapSqlParameterSource();

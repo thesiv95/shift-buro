@@ -1,5 +1,6 @@
 package ftc.shift.sample.repositories;
 
+import ftc.shift.sample.models.Card;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
@@ -20,20 +21,19 @@ public class CardExtractor implements ResultSetExtractor<List<Card>> {
         while (rs.next()) {
 
 
-            Card card;
+            Card card = new Card();
             card.setId(rs.getInt("id"));
             card.setName(rs.getString("name"));
             card.setPhone(rs.getString("phone"));
             card.setTask(rs.getString("task"));
             card.setIsActive(rs.getBoolean("is_active"));
 
-            cards.put(card);
-
-        }
 
 
         }
 
-        return new ArrayList<>(cards.values());
+
+
+        return new ArrayList<Card>(cards.values());
     }
 }
