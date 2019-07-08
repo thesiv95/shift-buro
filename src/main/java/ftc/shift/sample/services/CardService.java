@@ -24,5 +24,8 @@ public class CardService {
     return this.cardRepository.getAllCards();
   }
 
+  public Card getCard(Integer id) { return this.cardRepository.getCard(id); }
+
+  public Card addCard(Card card) { return this.cardRepository.addCard(card); }
 }
 

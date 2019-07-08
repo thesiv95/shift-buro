@@ -5,6 +5,7 @@ import ftc.shift.sample.models.Card;
 import ftc.shift.sample.services.CardService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,27 @@ public class CardsController {
     List<Card> card = service.getAllCards();
     return ResponseEntity.ok(card);
   }
+
+  @GetMapping(CARDS_PATH + "/{id}")
+  @ApiOperation(value = "Получение карточки по ее айди")
+  public ResponseEntity<Card> getCard(
+          //@ApiParam(value = "Идентификатор пользователя")
+          //@RequestHeader("userId") String userId,
+          @ApiParam(value = "Идентификатор книги")
+          @PathVariable Integer id) {
+    Card card = service.getCard(id);
+    return ResponseEntity.ok(card);
+  }
+
+  @PostMapping(CARDS_PATH)
+  @ApiOperation(value = "Добавление новой карты")
+  public ResponseEntity<Card> addCard(
+          @ApiParam(value = "Данные для новой карты")
+          @RequestBody Card card) {
+    Card result = service.addCard(card);
+    return ResponseEntity.ok(result);
+  }
+
 
 
 }

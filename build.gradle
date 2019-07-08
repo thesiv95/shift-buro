@@ -29,5 +29,6 @@ dependencies {
     compile("io.springfox:springfox-swagger-ui:2.9.2")
     
     compile("com.h2database:h2")
-    compile("org.springframework:spring-jdbc")
+    //compile("org.springframework:spring-jdbc")
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
 }

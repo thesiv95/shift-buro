@@ -9,4 +9,9 @@ import java.util.List;
  */
 public interface CardRepository {
     List<Card> getAllCards();
+    //void changeBalance(int price, int recipientId, int donorId);
+    Card getCard(Integer id);
+    void updateStatus(Integer id, Boolean status);
+    Card addCard(Card card);
+    void initialize();
 }

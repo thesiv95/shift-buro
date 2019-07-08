@@ -11,4 +11,8 @@ import java.util.List;
 
 public interface UserRepository {
     List<User> getAllUsers();
+    User addUser(User user);
+    void initialize();
+    void changeBalance(Integer price, Integer recipientId, Integer donorId);
+    User getUser(Integer id);
 }

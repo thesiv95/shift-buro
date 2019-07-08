@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
+import javax.validation.constraints.Null;
 import java.util.List;
 
 /**
@@ -27,7 +28,6 @@ public class DatabaseCardRepository implements CardRepository {
     @Autowired
     private UserExtractor userExtractor;
 
-    @PostConstruct
     public void initialize() {
         // Подразумевается, что H2 работает в in-memory режиме и таблицы необходимо создавать при каждом старте приложения
         // SQL запросы для создания таблиц       ;
@@ -40,32 +40,14 @@ public class DatabaseCardRepository implements CardRepository {
                 "FOREIGN KEY (USER_ID) REFERENCES USERS(ID)" +
                 ");";
 
-        String createUsersTableSql = "create table USERS (" +
-                "ID INT PRIMARY KEY," +
-                "NAME VARCHAR(50)," +
-                "PHONE VARCHAR(20)," +
-                "AGE VARCHAR(20),"+
-                "CITY VARCHAR(20)," +
-                "PIC_URL VARCHAR(255)," +
-                "STATUS VARCHAR(50)," +
-                "DESCRIPTION VARCHAR(255)," +
-                "BALANCE INT);";
-
-
-        jdbcTemplate.update(createUsersTableSql, new MapSqlParameterSource());
         jdbcTemplate.update(createCardsTableSql, new MapSqlParameterSource());
 
         // Заполним таблицы тестовыми данными
-        new Card(1,	1,	"Могу сходить за хлебом", false);
+        //new Card(1,	1,	"Могу сходить за хлебом", false);
 
-        new Card(2,	2,	"Прошу посидеть с ребенком", false);
+        //new Card(2,	2,	"Прошу посидеть с ребенком", false);
 
-        new Card(3,	3,	"Могу погулять с собакой", false);
-
-
-        new ftc.shift.sample.models.User(1, "Georgy", "+79139432282", 50, 12, "s", "a", "a", "a");
-        new ftc.shift.sample.models.User(2, "Marina", "+79130002282", 50, 12, "s", "a", "a", "a");
-        new ftc.shift.sample.models.User(3, "Ivan", "+79139221788",50, 12, "s", "a", "a", "a");
+        //new Card(3,	3,	"Могу погулять с собакой", false);
 
     }
 
@@ -80,17 +62,6 @@ public class DatabaseCardRepository implements CardRepository {
         List<Card> all = jdbcTemplate.query(sql, params, cardExtractor);
         return all;
     }
-
-    // Загрузить всех пользователей
-    public List<User> getAllUsers() {
-        String sql = "select * from USERS";
-
-        MapSqlParameterSource params = new MapSqlParameterSource();
-
-        List<User> all = jdbcTemplate.query(sql, params, userExtractor);
-        return all;
-    }
-
 
     // Пометить заявку как Выполнено/не выполнено
     // по id пользователя
@@ -108,7 +79,8 @@ public class DatabaseCardRepository implements CardRepository {
     }
 
     // Изменение баллов
-    private void changeBalance(int price, int recipientId, int donorId){
+    /*
+    public void changeBalance(int price, int recipientId, int donorId) {
         // Добавляем баллы к получателю
         String addBallsSql = "UPDATE `users` SET `balance` " +
                 "= `balance` + " + price + " WHERE `id` = " + recipientId;
@@ -124,6 +96,36 @@ public class DatabaseCardRepository implements CardRepository {
 
         jdbcTemplate.update(addBallsSql, params);
         jdbcTemplate.update(removeBallsSql, params);
+    }
+     */
 
+    public Card addCard(Card card){
+        String addCardsql = "INSERT INTO INFORMATION VALUES " +
+                "(" + card.getId() + "," +
+                card.getUserId() + "," +
+                card.getTask() + "," +
+                card.getIsActive() + ");";
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("id", card.getId())
+                .addValue("userId", card.getUserId())
+                .addValue("task", card.getTask())
+                .addValue("isActive", card.getIsActive());
+
+        jdbcTemplate.update(addCardsql, params);
+        return card;
+    }
+
+    public Card getCard(Integer id) {
+        String sql = "SELECT * FROM INFORMATION WHERE INFORMATION.ID=:id";
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("userId", id);
+
+        List<Card> cards = jdbcTemplate.query(sql, params, cardExtractor);
+
+        if (cards.isEmpty()) { return null; }
+
+        return cards.get(0);
     }
 }

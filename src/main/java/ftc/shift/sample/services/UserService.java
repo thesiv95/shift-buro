@@ -17,7 +17,11 @@ public class UserService {
         this.userRepository = cardRepository;
     }
 
-    public List<User> getAllUsers(){
-        return this.userRepository.getAllUsers();
-    }
+    public List<User> getAllUsers(){ return this.userRepository.getAllUsers(); }
+
+    public User getUser(Integer id) { return this.userRepository.getUser(id); }
+
+    public User addUsers(User user) { return this.userRepository.addUser(user); }
+
+
 }

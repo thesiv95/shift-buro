@@ -19,7 +19,6 @@ public class UserExtractor implements ResultSetExtractor<List<User>> {
 
         while (rs.next()) {
 
-
             User user = new User();
 
             user.setId(rs.getInt("id"));
@@ -33,8 +32,6 @@ public class UserExtractor implements ResultSetExtractor<List<User>> {
             user.setDescription(rs.getString("description"));
 
         }
-
-
 
         return new ArrayList<>(users.values());
     }
