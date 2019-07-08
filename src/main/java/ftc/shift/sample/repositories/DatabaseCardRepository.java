@@ -99,21 +99,17 @@ public class DatabaseCardRepository implements CardRepository {
     }
      */
 
-    public Card addCard(Card card){
-        String addCardsql = "INSERT INTO INFORMATION VALUES " +
-                "(" + card.getId() + "," +
-                card.getUserId() + "," +
-                card.getTask() + "," +
-                card.getIsActive() + ");";
+    public Boolean addCard(Card card){
 
+        String insertCardSql = "insert into INFORMATION (ID, USER_ID, TASK, IS_ACTIVE) values (:id, :userId, :task, :isActive)";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", card.getId())
                 .addValue("userId", card.getUserId())
                 .addValue("task", card.getTask())
                 .addValue("isActive", card.getIsActive());
 
-        jdbcTemplate.update(addCardsql, params);
-        return card;
+        return jdbcTemplate.update(insertCardSql, params) != 0;
+
     }
 
     public Card getCard(Integer id) {

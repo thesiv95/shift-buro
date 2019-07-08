@@ -12,6 +12,7 @@ public interface CardRepository {
     //void changeBalance(int price, int recipientId, int donorId);
     Card getCard(Integer id);
     void updateStatus(Integer id, Boolean status);
-    Card addCard(Card card);
+    Boolean addCard(Card card);
     void initialize();
+
 }

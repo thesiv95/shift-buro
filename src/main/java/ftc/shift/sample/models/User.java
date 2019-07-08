@@ -39,9 +39,9 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String name, String phone, Integer balance, Integer age,
+    public User(String name, String phone, Integer balance, Integer age,
                 String city, String pic_url, String status, String description) {
-        this.id = id;
+        //this.id = id;
         this.name = name;
         this.phone = phone;
         this.balance = balance;

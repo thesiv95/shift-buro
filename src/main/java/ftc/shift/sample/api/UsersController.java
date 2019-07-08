@@ -30,8 +30,6 @@ public class UsersController {
     @GetMapping(USERS_PATH + "/{id}")
     @ApiOperation(value = "Получение пользователя по айди")
     public ResponseEntity<User> getUser(
-            //@ApiParam(value = "Идентификатор пользователя")
-            //@RequestHeader("userId") String userId,
             @ApiParam(value = "Идентификатор пользователя")
             @PathVariable Integer id) {
         User user = service.getUser(id);
@@ -45,5 +43,27 @@ public class UsersController {
             @RequestBody User user) {
         User result = service.addUsers(user);
         return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping(USERS_PATH + "/{userId}")
+    @ApiOperation(value = "Удаление пользователя")
+    public ResponseEntity<Void> deleteUser(
+            @ApiParam(value = "Айди для удаления")
+            @PathVariable Integer userId) {
+        service.deleteUSer(userId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(USERS_PATH + "/changeBalance") //+ "/{recipientId}" + "/{donorId}")
+    @ApiOperation(value = "Изменение баланса при сделке")
+    public ResponseEntity<User> changeBalance(
+            @ApiParam(value = "Цена сделки")
+            @RequestHeader Integer price,
+            @ApiParam(value = "АЙди получателя")
+            @RequestHeader Integer recipientId,
+            @ApiParam(value = "АЙди донора")
+            @RequestHeader Integer donorId) {
+        service.changeBalance(price, recipientId, donorId);
+        return ResponseEntity.ok().build();
     }
 }

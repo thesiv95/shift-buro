@@ -23,5 +23,9 @@ public class UserService {
 
     public User addUsers(User user) { return this.userRepository.addUser(user); }
 
+    public void deleteUSer(Integer userId) { this.userRepository.deleteUser(userId); }
 
+    public void changeBalance(Integer price, Integer recipientId, Integer donorId) {
+        this.userRepository.changeBalance(price, recipientId, donorId);
+    }
 }

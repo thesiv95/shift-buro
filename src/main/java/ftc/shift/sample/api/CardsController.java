@@ -40,13 +40,12 @@ public class CardsController {
 
   @PostMapping(CARDS_PATH)
   @ApiOperation(value = "Добавление новой карты")
-  public ResponseEntity<Card> addCard(
+  public ResponseEntity<Boolean> addCard(
           @ApiParam(value = "Данные для новой карты")
           @RequestBody Card card) {
-    Card result = service.addCard(card);
+    Boolean result = service.addCard(card);
     return ResponseEntity.ok(result);
   }
-
 
 
 }

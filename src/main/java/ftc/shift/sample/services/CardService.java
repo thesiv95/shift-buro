@@ -26,6 +26,6 @@ public class CardService {
 
   public Card getCard(Integer id) { return this.cardRepository.getCard(id); }
 
-  public Card addCard(Card card) { return this.cardRepository.addCard(card); }
+  public Boolean addCard(Card card) { return this.cardRepository.addCard(card); }
 }
 

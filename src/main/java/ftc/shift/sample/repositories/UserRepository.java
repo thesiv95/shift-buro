@@ -15,4 +15,5 @@ public interface UserRepository {
     void initialize();
     void changeBalance(Integer price, Integer recipientId, Integer donorId);
     User getUser(Integer id);
+    void deleteUser(Integer userId);
 }
