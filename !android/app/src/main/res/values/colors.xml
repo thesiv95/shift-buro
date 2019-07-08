@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#13B19D</color>
+    <color name="colorPrimaryDark">#13B19D</color>
+    <color name="colorAccent">#FADF00</color>
+    <color name="colorWindowBackground">#AAD8E4</color>
+    <color name="colorUserTextViewBlock">#E4EBEB</color>
+</resources>
