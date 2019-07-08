@@ -103,22 +103,14 @@ public class DatabaseUserRepository implements UserRepository {
     }
 
     public void changeBalance(Integer price, Integer recipientId, Integer donorId) {
-        // Добавляем баллы к получателю
-        //String getRecipientBalance =
-        //Integer recBal = this.getUser(recipientId).getBalance() + price;
-        //Integer donBal = this.getUser((donorId)).getBalance() - price;
-        String getBalanses = "SELECT * FROM USERS WHERE ID =:recipientId AND ID =:donorId";
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("recipientId", recipientId)
-                .addValue("donorId", donorId);
-        List<User> all = jdbcTemplate.query(getBalanses, params, userExtractor);
-        Integer rec = all.get(0).getBalance() + price;
-        Integer don = all.get(1).getBalance() - price;
-        //добавляем баллы
-        String addBallsSql = "UPDATE USERS SET BALANCE = " + rec + " WHERE ID = " + recipientId;
+        Integer recBal = this.getUser(recipientId).getBalance() + price;
+        Integer donBal = this.getUser(donorId).getBalance() - price;
+
+        // добавляем
+        String addBallsSql = "UPDATE USERS SET BALANCE = " + recBal + " WHERE ID = " + recipientId;
 
         // Снимаем баллы у донора
-        String removeBallsSql = "UPDATE USERS SET BALANCE = " + don + " WHERE ID = " + donorId;
+        String removeBallsSql = "UPDATE USERS SET BALANCE = " + donBal + " WHERE ID = " + donorId;
 
         MapSqlParameterSource params2 = new MapSqlParameterSource()
                 .addValue("price", price)
@@ -130,7 +122,7 @@ public class DatabaseUserRepository implements UserRepository {
     }
 
     public User getUser(Integer id) {
-        String sql = "SELECT * FROM INFORMATION WHERE INFORMATION.ID=:id";
+        String sql = "SELECT * FROM USERS WHERE ID=:id";
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", id);
@@ -148,6 +140,5 @@ public class DatabaseUserRepository implements UserRepository {
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("userId", userId);
         jdbcTemplate.update(sql, params);
-
     }
 }

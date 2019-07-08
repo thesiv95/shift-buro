@@ -15,10 +15,9 @@ import java.util.Map;
 public class CardExtractor implements ResultSetExtractor<List<Card>> {
     @Override
     public List<Card> extractData(ResultSet rs) throws SQLException {
-        Map<String, Card> cards = new HashMap<>();
+        List<Card> cards = new ArrayList<>();
 
         while (rs.next()) {
-
 
             Card card = new Card();
             card.setId(rs.getInt("id"));
@@ -26,12 +25,9 @@ public class CardExtractor implements ResultSetExtractor<List<Card>> {
             card.setTask(rs.getString("task"));
             card.setIsActive(rs.getBoolean("is_active"));
 
-
-
+            cards.add(card);
         }
 
-
-
-        return new ArrayList<Card>(cards.values());
+        return cards;
     }
 }

@@ -15,7 +15,7 @@ import java.util.Map;
 public class UserExtractor implements ResultSetExtractor<List<User>> {
     @Override
     public List<User> extractData(ResultSet rs) throws SQLException {
-        Map<String, User> users = new HashMap<>();
+        List<User> users = new ArrayList<>();
 
         while (rs.next()) {
 
@@ -30,9 +30,9 @@ public class UserExtractor implements ResultSetExtractor<List<User>> {
             user.setPic_url(rs.getString("pic_url"));
             user.setStatus(rs.getString("status"));
             user.setDescription(rs.getString("description"));
-
+            users.add(user);
         }
 
-        return new ArrayList<>(users.values());
+        return users;
     }
 }

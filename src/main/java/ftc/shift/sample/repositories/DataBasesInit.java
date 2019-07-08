@@ -67,7 +67,7 @@ public class DataBasesInit {
         //userDB.addUser(new User(3, "Ivan", "+79139221788",50, 12, "s", "a", "a", "a"));
         //cardDB.addCard(new Card(1,	1,	"Могу сходить за хлебом", false));
 
-        userDB.changeBalance(10, 10,11);
+        userDB.changeBalance(50, 43,44);
     }
 
 
