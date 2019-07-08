@@ -1,4 +1,5 @@
 .idea
+.gradle
 db.txt
 struct.txt
 struct.java
