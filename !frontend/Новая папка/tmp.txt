@@ -1,0 +1,205 @@
+let userId = parseInt(window.location.search.replace(/\D+/g,""));
+
+// Показ авы и баланса
+const renderUser = user => `
+  <div class="user">
+    <div class="user_pic-mini">
+      <img src=${user.PIC_URL}>
+      <div class="user_balance">
+        <img src="https://icon-icons.com/icons2/403/PNG/32/coin-us-dollar_40536.png">
+        <span>${user.BALANCE}</span>
+      </div>
+    </div>
+  </div>
+`;
+
+// Статус просьбы: актуально ли
+const isActive = bool =>
+{
+  if(bool)
+  {
+    return `<div class="request_status">Статус: актуально</div>`;
+  }
+  return `<div class="request_status">Статус: неактуально</div>`;
+}
+
+// Вывод информации о просьбе
+const renderRequest = request => `
+  <div class="request">
+    <form id="requests">
+      <div class="request_task">${request.TASK}</div>
+  ` + isActive(request.STATUS) +
+  `   <div class="request_type">Категория: ${request.TYPE}</div>
+      <div class="request_owner-name">Имя: ${request.OWNERNAME}</div>
+      <div class="request_phone">Телефон: ${request.PHONE}</div>
+      <div class="request_city">Город: ${request.CITY}</div>
+      <div class="request_description">${request.DESCRIPTION}</div>
+      <button class="button" type="button" id="button">Принять</button> 
+      <div class="request_price">${request.PRICE}</div>
+    </form>
+  </div>
+`;
+
+// Вывод списка всех просьб
+const getAllRequests = function() {
+  createRequest({ path: "CARD", method: "GET"})
+    .then(response => {
+      document.querySelector("#requests").innerHTML = response
+        .map(renderRequest)
+        .join("");
+      console.log("Результат запроса просьб", response);
+    })
+    .catch(err => {
+      document.querySelector("#requests").innerHTML =
+        "Не удалось получить список просьб";
+      console.log("Ошибка при получении списка просьб", err);
+    });
+};
+
+// getAllRequests();
+
+
+const accept = document.querySelector("#button");
+window.onload = function() {
+  accept.addEventListener("click", event => {
+  event.preventDefault();
+
+  const data = getFieldData(event.target);
+  console.log("main", "data", data);
+  data.STATUS = true;
+  alert(1);
+
+  toggleClass(".request", "loading");
+
+  createRequest({ path: `CARD/${ID}`, method: "PUT" }, {}, data)
+    .then(response => {
+      toggleClass(".request", "loading");
+      console.log("Книга добавлена", response);
+    })
+    .catch(() => {
+      toggleClass(".add-book", "loading");
+      console.log("Не удалось добавить книгу");
+    });
+});
+}
+
+// button.onclick = function () {
+//   createRequest({ path: `CARD/${ID}`, method: "PUT" }, {}, {STATUS: true})
+//     .then(response => {
+//       toggleClass(".request", "loading");
+//       console.log("Книга добавлена", response);
+//     })
+//     .catch(() => {
+//       toggleClass(".request", "loading");
+//       console.log("Не удалось добавить книгу");
+//     }
+//   }
+
+
+// for (var i = 1; i <= 2; i++)
+// {
+//   createRequest({ path: "CARD/" + i, method: "GET" })
+//     .then(response => {
+//       document.querySelector("#m" + i).innerHTML = renderRequest(response);
+//     });
+// }
+
+// for (var i = 1; i <= 5; i++)
+// {
+//   const chars = "CARD/" + i;
+//   createRequest({ path: chars, method: "GET" })
+//     .then(response => {
+//       document.querySelector("#request" + i).innerHTML = renderRequest(response);
+//       toggleClass(".request" + i, "loading");
+//       console.log("Данные просьбы получены", response);
+//     })
+//     .catch(() => {
+//       console.log(response);
+//       document.querySelector("#request" + i).innerHTML =
+//         "Просьбы с таким id не нашлось :(";
+//       toggleClass(".request" + i, "loading");
+//       console.log("Не нашли просьбу с id=", i);
+//     });
+// }
+
+// const getOneBookForm = document.querySelector("#get-one-book");
+// getOneBookForm.addEventListener("submit", event => {
+//   event.preventDefault();
+
+//   const data = getFieldData(event.target);
+
+//   toggleClass(".one-book", "loading");
+
+  
+// });
+
+
+
+
+
+//-----------------------------------------Отображение просьб-----------------------------------------
+// Статус просьбы: актуально ли
+const isActive = bool =>
+{
+  if(bool)
+  {
+    return `<div class="card_status">Статус: актуально</div>`;
+  }
+  return `<div class="card_status">Статус: неактуально</div>`;
+}
+
+// Вывод информации о просьбе
+const renderCard = card => `
+  <div class="card">
+    <form id="card">
+      <div class="card_task">${card.TASK}</div>
+  ` + isActive(card.STATUS) +
+  `   <div class="card_type">Категория: ${card.TYPE}</div>
+      <div class="card_owner-name">Имя: ${card.OWNERNAME}</div>
+      <div class="card_phone">Телефон: ${card.PHONE}</div>
+      <div class="card_city">Город: ${card.CITY}</div>
+      <div class="card_description">${card.DESCRIPTION}</div>
+      <button class="button" type="submit">Принять</button>
+      <div class="card_price">${card.PRICE}</div>
+    </form>
+  </div>
+`;
+
+// Вывод списка всех просьб
+const getAllCards = function() {
+  createRequest({ path: "CARD", method: "GET"})
+    .then(response => {
+      document.querySelector("#cards").innerHTML = response
+        .map(renderCard)
+        .join("");
+      console.log("Результат запроса просьб", response);
+    })
+    .catch(err => {
+      document.querySelector("#cards").innerHTML =
+        "Не удалось получить список просьб";
+      console.log("Ошибка при получении списка просьб", err);
+    });
+};
+
+getAllCards();
+
+const accept = document.querySelector("#card");
+accept.addEventListener("submit", event => {
+  event.preventDefault();
+
+  const data = getFieldData(event.target);
+  console.log("main", "data", data);
+  data.STATUS = true;
+
+  toggleClass(".card", "loading");
+
+  createRequest({ path: "CARD/"+ data.ID, method: "PUT" }, {}, data)
+    .then(response => {
+      toggleClass(".card", "loading");
+      console.log("Книга добавлена", response);
+    })
+    .catch(() => {
+      toggleClass(".card", "loading");
+      console.log("Не удалось добавить книгу");
+    });
+});

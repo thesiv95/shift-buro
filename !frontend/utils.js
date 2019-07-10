@@ -1,7 +1,5 @@
-const HOST = 'http://5d1dde823374890014f00a2f.mockapi.io';
-
 const compileUrl = (url, params) => {
-  const resultArr = [HOST];
+  const resultArr = [];
   const options = Object.assign({}, params);
 
   const pathArr = url.split("/");
@@ -50,7 +48,7 @@ const createRequest = (options, queryOptions, body) => {
     headers: new Headers({
       Accept: "application/json",
       "Content-Type": "application/json",
-      // userId: userId
+      userId: window.userId
     }),
     method: options.method || "GET",
     body: body ? JSON.stringify(body) : undefined

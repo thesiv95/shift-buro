@@ -20,7 +20,7 @@ public class CardsController {
   @Autowired
   private CardService service;
 
-  @GetMapping(CARDS_PATH)
+  @GetMapping(CARDS_PATH + "/getAllCards")
   @ApiOperation(value = "Получение всех карточек")
   public ResponseEntity<List<Card>> getAllCards() {
     List<Card> cards = service.getAllCards();
@@ -52,7 +52,7 @@ public class CardsController {
 
   @PostMapping(CARDS_PATH + "/updateStatus")
   @ApiOperation(value = "обновление статуса карты")
-  public ResponseEntity<String> uodateStatus(
+  public ResponseEntity<String> updateStatus(
           @ApiParam(value = "айди карты")
           @RequestHeader Integer cardId,
           @ApiParam(value = "новый статус")

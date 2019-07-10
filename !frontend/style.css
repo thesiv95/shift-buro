@@ -80,12 +80,12 @@ body {
     vertical-align: middle;
 }
 
-.category {
+.type {
     display: inline-block;
     margin-right: 250px;
 }
 
-.category select {
+.type select {
     
 }
 
@@ -94,39 +94,39 @@ body {
     vertical-align: middle;
 }
 
-.requests {
+.cards {
     background-color: white;
     margin: 30px 250px;
 }
 
-.request {
+.card {
 
 }
 
-.request_task {
+.card_task {
 
 }
 
-.request_status {
+.card_status {
 
 }
 
-.request_type {
+.card_type {
 
 }
 
-.request_owner-name {
+.card_owner-name {
 
 }
 
-.request_phone {
+.card_phone {
 
 }
 
-.request_city {
+.card_city {
 
 }
 
-.request_description {
+.card_description {
 
 }
