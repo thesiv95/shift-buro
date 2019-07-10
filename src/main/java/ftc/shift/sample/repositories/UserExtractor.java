@@ -23,13 +23,8 @@ public class UserExtractor implements ResultSetExtractor<List<User>> {
 
             user.setId(rs.getInt("id"));
             user.setName(rs.getString("name"));
-            user.setPhone(rs.getString("phone"));
+            user.setPicUrl(rs.getString("pic_url"));
             user.setBalance(rs.getInt("balance"));
-            user.setAge(rs.getInt("age"));
-            user.setCity(rs.getString("city"));
-            user.setPic_url(rs.getString("pic_url"));
-            user.setStatus(rs.getString("status"));
-            user.setDescription(rs.getString("description"));
             users.add(user);
         }
 

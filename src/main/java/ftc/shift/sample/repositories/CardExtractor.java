@@ -18,16 +18,19 @@ public class CardExtractor implements ResultSetExtractor<List<Card>> {
         List<Card> cards = new ArrayList<>();
 
         while (rs.next()) {
-
             Card card = new Card();
             card.setId(rs.getInt("id"));
-            card.setUserId(rs.getInt("userId"));
+            card.setType(rs.getString("type"));
             card.setTask(rs.getString("task"));
-            card.setIsActive(rs.getBoolean("is_active"));
-
+            card.setOwnerName(rs.getString("owner_Name"));
+            card.setPhone(rs.getString("phone"));
+            card.setCity(rs.getString("city"));
+            card.setDescription(rs.getString("description"));
+            card.setPrice(rs.getInt("price"));
+            card.setStatus(rs.getBoolean("status"));
+            card.setOwnerId(rs.getInt("owner_Id"));
             cards.add(card);
         }
-
         return cards;
     }
 }

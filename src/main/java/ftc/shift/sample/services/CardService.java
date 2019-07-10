@@ -26,6 +26,13 @@ public class CardService {
 
   public Card getCard(Integer id) { return this.cardRepository.getCard(id); }
 
-  public Boolean addCard(Card card) { return this.cardRepository.addCard(card); }
+  public String addCard(Card card) { return this.cardRepository.addCard(card); }
+
+  public String updateStatus(Integer cardId, Boolean status) { return this.cardRepository.updateStatus(cardId, status); }
+
+  public String deleteCard(Integer cardId) { return this.cardRepository.deleteCard(cardId); }
+
+  public List<Card> getTypedCards (String type) {return this.cardRepository.getTypedCards(type); }
 }
+
 

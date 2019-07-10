@@ -38,28 +38,12 @@ public class DatabaseUserRepository implements UserRepository {
     public void initialize() {
         // Подразумевается, что H2 работает в in-memory режиме и таблицы необходимо создавать при каждом старте приложения
         // SQL запросы для создания таблиц
-        ;
-        String createGenerateBookIdSequenceSql = "create sequence USER_ID_GENERATOR";
-
-
         String createUsersTableSql = "create table USERS (" +
                 "ID       INT PRIMARY KEY AUTO_INCREMENT," +
-                "NAME     VARCHAR(50)," +
-                "PHONE    VARCHAR(20)," +
-                "AGE      VARCHAR(20),"+
-                "CITY     VARCHAR(20)," +
+                "NAME     VARCHAR(255)," +
                 "PIC_URL  VARCHAR(255)," +
-                "STATUS   VARCHAR(50)," +
-                "DESCRIPTION VARCHAR(255)," +
                 "BALANCE  INT);";
-
-
         jdbcTemplate.update(createUsersTableSql, new MapSqlParameterSource());
-
-        //new ftc.shift.sample.models.User(1, "Georgy", "+79139432282", 50, 12, "s", "a", "a", "a");
-        //new ftc.shift.sample.models.User(2, "Marina", "+79130002282", 50, 12, "s", "a", "a", "a");
-        //new ftc.shift.sample.models.User(3, "Ivan", "+79139221788",50, 12, "s", "a", "a", "a");
-
     }
 
     public List<User> getAllUsers() {
@@ -72,56 +56,67 @@ public class DatabaseUserRepository implements UserRepository {
     }
 
     // Добавить пользователя
-    public User addUser(User user){
+    public String addUser(User user){
+        if (user == null)
+            return "Некорректный пользователь";
+        else {
+            String insertUserSql = "INSERT INTO USERS (NAME, PIC_URL, BALANCE) " +
+                    "values (?, ?, ?)";
+            KeyHolder holder = new GeneratedKeyHolder();
 
-        String insertUserSql = "insert into USERS (NAME, PHONE, AGE, CITY, PIC_URL, STATUS, DESCRIPTION, BALANCE) " +
-                "values (?, ?, ?, ?, ?, ?, ?, ?)";
-        KeyHolder holder = new GeneratedKeyHolder();
+            jdbcTemplate.getJdbcTemplate().update(new PreparedStatementCreator() {
 
-        jdbcTemplate.getJdbcTemplate().update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection)
+                        throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(insertUserSql.toString(),
+                            Statement.RETURN_GENERATED_KEYS);
+                    ps.setString(1, user.getName());
+                    ps.setString(2, user.getPicUrl());
+                    ps.setInt(3, user.getBalance());
+                    return ps;
+                }
+            }, holder);
 
-            @Override
-            public PreparedStatement createPreparedStatement(Connection connection)
-                    throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(insertUserSql.toString(),
-                        Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, user.getName());
-                ps.setString(2, user.getPhone());
-                ps.setInt(3, user.getAge());
-                ps.setString(4, user.getCity());
-                ps.setString(5, user.getPic_url());
-                ps.setString(6, user.getStatus());
-                ps.setString(7, user.getDescription());
-                ps.setInt(8, user.getBalance());
-                return ps;
-            }
-        }, holder);
+            Integer newPersonId = holder.getKey().intValue();
+            user.setId(newPersonId);
+            return "Успешно";
+        }
 
-        Integer newPersonId = holder.getKey().intValue();
-        user.setId(newPersonId);
-        return user;
     }
 
-    public void changeBalance(Integer price, Integer recipientId, Integer donorId) {
-        Integer recBal = this.getUser(recipientId).getBalance() + price;
-        Integer donBal = this.getUser(donorId).getBalance() - price;
+    public String changeBalance(Integer price, Integer recipientId, Integer donorId) {
+        User recip = getUser(recipientId);
+        User donor = getUser(donorId);
+        if (price < 50)
+            return "Нукорректная цена";
+        if (donor.getBalance() < price)
+            return "ты бомж, у тебя нет денег";
+        if (recipientId == donorId)
+            return "сам у себя покупаешь дурачок чи що";
+        else {
+            Integer recBal = recip.getBalance() + price;
+            Integer donBal = donor.getBalance() - price;
 
-        // добавляем
-        String addBallsSql = "UPDATE USERS SET BALANCE = " + recBal + " WHERE ID = " + recipientId;
+            // добавляем
+            String addBallsSql = "UPDATE USERS SET BALANCE = " + recBal + " WHERE ID = " + recipientId;
 
-        // Снимаем баллы у донора
-        String removeBallsSql = "UPDATE USERS SET BALANCE = " + donBal + " WHERE ID = " + donorId;
+            // Снимаем баллы у донора
+            String removeBallsSql = "UPDATE USERS SET BALANCE = " + donBal + " WHERE ID = " + donorId;
 
-        MapSqlParameterSource params2 = new MapSqlParameterSource()
-                .addValue("price", price)
-                .addValue("recipientId", recipientId)
-                .addValue("donorId", donorId);
+            MapSqlParameterSource params2 = new MapSqlParameterSource()
+                    .addValue("price", price)
+                    .addValue("recipientId", recipientId)
+                    .addValue("donorId", donorId);
 
-        jdbcTemplate.update(addBallsSql, params2);
-        jdbcTemplate.update(removeBallsSql, params2);
+            jdbcTemplate.update(addBallsSql, params2);
+            jdbcTemplate.update(removeBallsSql, params2);
+            return "Успешно";
+        }
     }
 
     public User getUser(Integer id) {
+
         String sql = "SELECT * FROM USERS WHERE ID=:id";
 
         MapSqlParameterSource params = new MapSqlParameterSource()
@@ -132,13 +127,30 @@ public class DatabaseUserRepository implements UserRepository {
         if (users.isEmpty()) { return null; }
 
         return users.get(0);
-    }
+       }
 
-    public void deleteUser(Integer userId) {
+    public String deleteUser(Integer userId) {
+        if (getUser(userId) == null)
+            return "Пользователь не найден";
         String sql = "DELETE FROM USERS WHERE USERS.ID=:userId";
-
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("userId", userId);
-        jdbcTemplate.update(sql, params);
+         jdbcTemplate.update(sql, params);
+         return "успешно";
+    }
+
+    public String updateUser(User user) {
+        if(user == null)
+            return "пользователь не задан";
+        if(user.getId() == null)
+            return "пользователь не существует";
+        else {
+            //String sql = "UPDATE USERS SET NAME:=name, PIC_URL:=picUrl, BALANCE:=balance WHERE ID:=userId";
+            String sql = "UPDATE USERS SET NAME = " + user.getName() + ", PIC_URL = " + user.getPicUrl() + ", BALANCE = " +
+                    user.getBalance() + "WHERE ID = " + user.getId();
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            jdbcTemplate.update(sql, params);
+            return "успешно";
+        }
     }
 }

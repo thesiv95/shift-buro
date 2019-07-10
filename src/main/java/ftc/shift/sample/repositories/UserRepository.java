@@ -11,9 +11,10 @@ import java.util.List;
 
 public interface UserRepository {
     List<User> getAllUsers();
-    User addUser(User user);
+    String addUser(User user);
     void initialize();
-    void changeBalance(Integer price, Integer recipientId, Integer donorId);
+    String changeBalance(Integer price, Integer recipientId, Integer donorId);
     User getUser(Integer id);
-    void deleteUser(Integer userId);
+    String deleteUser(Integer userId);
+    String updateUser(User user);
 }
