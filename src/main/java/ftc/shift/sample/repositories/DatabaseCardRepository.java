@@ -1,5 +1,7 @@
 package ftc.shift.sample.repositories;
 
+import ftc.shift.sample.exception.BadRequestException;
+import ftc.shift.sample.exception.NotFoundException;
 import ftc.shift.sample.models.Card;
 import ftc.shift.sample.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +32,6 @@ public class DatabaseCardRepository implements CardRepository {
 
     @Autowired
     private CardExtractor cardExtractor;
-
-    @Autowired
-    private UserRepository userRepository;
 
     public void initialize() {
         // Подразумевается, что H2 работает в in-memory режиме и таблицы необходимо создавать при каждом старте приложения
@@ -65,26 +64,22 @@ public class DatabaseCardRepository implements CardRepository {
         List<Card> all = jdbcTemplate.query(sql, params, cardExtractor);
         return all;
     }
+    public void updateStatus(Integer userid, Integer cardid) {
+        Boolean check = getCard(cardid).getStatus();
+        if(check == getCard(cardid).getStatus())
+            throw new BadRequestException("статусы совпадают");
+        if (userid == getCard(cardid).getOwnerId())
+            throw new BadRequestException("самому себе меняешь");
+        String updateCardStatusSql = "UPDATE ADS SET STATUS = "
+                + getCard(cardid).getStatus() + " WHERE ID = " + cardid;
 
-    // Пометить заявку как Выполнено/не выполнено
-    // по id пользователя
-    public String updateStatus(Integer id, Boolean status) {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("id", cardid)
+                .addValue("status", getCard(cardid).getStatus());
 
-        Boolean check = getCard(id).getStatus();
-        if(check == status)
-            return "Статусы совпадают";
-        else {
-            String updateCardStatusSql = "UPDATE ADS SET STATUS = "
-                    + status + " WHERE ID = " + id;
-
-            MapSqlParameterSource params = new MapSqlParameterSource()
-                    .addValue("id", id)
-                    .addValue("status", status);
-
-            jdbcTemplate.update(updateCardStatusSql, params);
-            return "успешно";
-        }
+        jdbcTemplate.update(updateCardStatusSql, params);
     }
+
 
 
     private Boolean checkCard(Card card) {
@@ -95,12 +90,11 @@ public class DatabaseCardRepository implements CardRepository {
         else return true;
     }
 
-    public String addCard(Card card) {
+    public void addCard(Card card, User user) {
         if (!checkCard(card))
-            return "объявление задано некорректно";
-        User user = userRepository.getUser(card.getOwnerId());
+            throw new BadRequestException("объявление задано некорректно");
         if (user.getBalance() < card.getPrice())
-            return "ваш баланс меньше чем указанная цена";
+            throw new BadRequestException("У вас недостаточно денег");
         else {
             String insertUserSql = "INSERT INTO ADS (TYPE, TASK, OWNER_NAME, PHONE, CITY, DESCRIPTION, PRICE, STATUS, OWNER_ID)" +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -129,7 +123,6 @@ public class DatabaseCardRepository implements CardRepository {
 
             Integer newCardId = holder.getKey().intValue();
             card.setId(newCardId);
-            return "успешно";
         }
     }
 
@@ -141,20 +134,24 @@ public class DatabaseCardRepository implements CardRepository {
 
         List<Card> cards = jdbcTemplate.query(sql, params, cardExtractor);
 
-        if (cards.isEmpty()) { return null; }
+        if (cards.isEmpty()) {
+            throw new NotFoundException("Некорректная карта");
+        }
 
         return cards.get(0);
     }
-
-    public String deleteCard(Integer cardId) {
+    //
+    //
+    public void deleteCard(Integer userId, Integer cardId) {
         if (getCard(cardId) == null)
-            return "объявление не существует";
+            throw new NotFoundException("Некорректная карта");
+        if(userId != getCard(cardId).getOwnerId())
+            throw new BadRequestException("нельзя удалять чужие карты");
         else {
             String sql = "DELETE FROM ADS WHERE ID=:cardId";
             MapSqlParameterSource params = new MapSqlParameterSource()
                     .addValue("cardId", cardId);
             jdbcTemplate.update(sql, params);
-            return "успешно";
         }
     }
 

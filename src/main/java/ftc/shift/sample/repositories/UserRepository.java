@@ -11,10 +11,10 @@ import java.util.List;
 
 public interface UserRepository {
     List<User> getAllUsers();
-    String addUser(User user);
+    void addUser(User user);
     void initialize();
-    String changeBalance(Integer price, Integer recipientId, Integer donorId);
+    void changeBalance(Integer cardId, Integer userId);
     User getUser(Integer id);
-    String deleteUser(Integer userId);
-    String updateUser(User user);
+    void deleteUser(Integer userId);
+    void updateUser(User user);
 }

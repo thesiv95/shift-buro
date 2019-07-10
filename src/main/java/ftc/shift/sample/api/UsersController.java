@@ -44,48 +44,48 @@ public class UsersController {
     //возвращает значение true (был создан пользователь) или false (создать не удалось)
     @PostMapping(USERS_PATH + "/addUser")
     @ApiOperation(value = "Добавление нового пользователя")
-    public ResponseEntity<String> addUser(
+    public ResponseEntity<Void> addUser(
             @ApiParam(value = "Данные для нового пользователя")
             @RequestBody User user) {
-        String result = service.addUsers(user);
-        return ResponseEntity.ok(result);
+        service.addUsers(user);
+        return ResponseEntity.ok().build();
     }
 
     //метода позволяет удалить пользователя, на вход получает число - айди пользователя, котрого надо удалить
     //возвращает переменную типа boolean (0 - не удалось удалить, не 0 - удалось)
-    @DeleteMapping(USERS_PATH + "/deleteUser" + "/{userId}")
+    @DeleteMapping(USERS_PATH + "/deleteUser")
     @ApiOperation(value = "Удаление пользователя")
-    public ResponseEntity<String> deleteUser(
+    public ResponseEntity<Void> deleteUser(
             @ApiParam(value = "Айди для удаления")
-            @PathVariable Integer userId) {
-        String result = service.deleteUSer(userId);
-        return ResponseEntity.ok(result);
+            @RequestHeader Integer userId) {
+        service.deleteUSer(userId);
+        return ResponseEntity.ok().build();
     }
 
     //метод позволяет изменить баланс двух пользователей после выполнения желания, на вход принимает три числа - айди сделки,
     //айди того кто выполняет, айди того кто разметистил желание;
     //возвращает переменную типа boolean (0 - не удалось удалить, не 0 - удалось)
-    @PostMapping(USERS_PATH + "/changeBalance")
+    @PostMapping(USERS_PATH + "/changeBalance" + "/{cardId}")
     @ApiOperation(value = "Изменение баланса при сделке")
-    public ResponseEntity<String> changeBalance(
-            @ApiParam(value = "Цена сделки")
-            @RequestHeader Integer price,
+    public ResponseEntity<Void> changeBalance(
+            //@ApiParam(value = "Цена сделки")
+            ///@RequestHeader Integer price,
             @ApiParam(value = "Айди получателя")
-            @RequestHeader Integer recipientId,
+            @PathVariable Integer cardId,
             @ApiParam(value = "Айди донора")
-            @RequestHeader Integer donorId) {
-        String result = service.changeBalance(price, recipientId, donorId);
-        return ResponseEntity.ok(result);
+            @RequestHeader Integer userId) {
+        service.changeBalance(cardId, userId);
+        return ResponseEntity.ok().build();
     }
 
     //метод позволяет изменить инфорацию о пользователе, на вход принимает экземпляр класса User
     //возвращает переменную типа boolean (0 - не удалось обновить, не 0 - удалось)
     @PostMapping(USERS_PATH + "/updateUser")
     @ApiOperation(value = "обновление информации о пользователе")
-    public ResponseEntity<String> updateUser(
+    public ResponseEntity<Void> updateUser(
             @ApiParam(value = "пользователь с новой информацией")
             @RequestBody User user) {
-        String result = service.updateUser(user);
-        return ResponseEntity.ok(result);
+        service.updateUser(user);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,5 +1,7 @@
 package ftc.shift.sample.repositories;
 
+import ftc.shift.sample.exception.BadRequestException;
+import ftc.shift.sample.exception.NotFoundException;
 import ftc.shift.sample.models.Card;
 import ftc.shift.sample.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class DatabaseUserRepository implements UserRepository {
     @Autowired
     private UserExtractor userExtractor;
 
+    @Autowired
+    private CardRepository cardRepository;
+
     public void initialize() {
         // Подразумевается, что H2 работает в in-memory режиме и таблицы необходимо создавать при каждом старте приложения
         // SQL запросы для создания таблиц
@@ -46,6 +51,8 @@ public class DatabaseUserRepository implements UserRepository {
         jdbcTemplate.update(createUsersTableSql, new MapSqlParameterSource());
     }
 
+
+
     public List<User> getAllUsers() {
         String sql = "select * from USERS";
 
@@ -56,9 +63,9 @@ public class DatabaseUserRepository implements UserRepository {
     }
 
     // Добавить пользователя
-    public String addUser(User user){
+    public void addUser(User user){
         if (user == null)
-            return "Некорректный пользователь";
+            throw new BadRequestException("Пользователь задан некорректно");
         else {
             String insertUserSql = "INSERT INTO USERS (NAME, PIC_URL, BALANCE) " +
                     "values (?, ?, ?)";
@@ -80,38 +87,40 @@ public class DatabaseUserRepository implements UserRepository {
 
             Integer newPersonId = holder.getKey().intValue();
             user.setId(newPersonId);
-            return "Успешно";
         }
 
     }
 
-    public String changeBalance(Integer price, Integer recipientId, Integer donorId) {
-        User recip = getUser(recipientId);
-        User donor = getUser(donorId);
+    public void changeBalance(Integer cardId, Integer userId) {
+        if (cardRepository.getCard(cardId).getStatus() == false)
+            throw new BadRequestException("Объявление неактивно");
+        if (userId == cardRepository.getCard(cardId).getOwnerId())
+            throw new BadRequestException("Сам у себя покупаешь");
+        User donor = getUser(cardRepository.getCard(cardId).getOwnerId());
+        User recip = getUser(userId);
+        Integer price = cardRepository.getCard(cardId).getPrice();
         if (price < 50)
-            return "Нукорректная цена";
+            throw new BadRequestException("некорректно задана цена");
         if (donor.getBalance() < price)
-            return "ты бомж, у тебя нет денег";
-        if (recipientId == donorId)
-            return "сам у себя покупаешь дурачок чи що";
+            throw new BadRequestException("у Вас не хватает денег");
         else {
+            cardRepository.updateStatus(userId, cardId);
             Integer recBal = recip.getBalance() + price;
             Integer donBal = donor.getBalance() - price;
 
             // добавляем
-            String addBallsSql = "UPDATE USERS SET BALANCE = " + recBal + " WHERE ID = " + recipientId;
+            String addBallsSql = "UPDATE USERS SET BALANCE = " + recBal + " WHERE ID = " + userId;
 
             // Снимаем баллы у донора
-            String removeBallsSql = "UPDATE USERS SET BALANCE = " + donBal + " WHERE ID = " + donorId;
+            String removeBallsSql = "UPDATE USERS SET BALANCE = " + donBal + " WHERE ID = " + cardRepository.getCard(cardId).getOwnerId();
 
             MapSqlParameterSource params2 = new MapSqlParameterSource()
                     .addValue("price", price)
-                    .addValue("recipientId", recipientId)
-                    .addValue("donorId", donorId);
+                    .addValue("recipientId", userId)
+                    .addValue("donorId", cardRepository.getCard(cardId).getOwnerId());
 
             jdbcTemplate.update(addBallsSql, params2);
             jdbcTemplate.update(removeBallsSql, params2);
-            return "Успешно";
         }
     }
 
@@ -129,28 +138,26 @@ public class DatabaseUserRepository implements UserRepository {
         return users.get(0);
        }
 
-    public String deleteUser(Integer userId) {
+    public void deleteUser(Integer userId) {
         if (getUser(userId) == null)
-            return "Пользователь не найден";
+            throw new NotFoundException("Некорректная карта");
         String sql = "DELETE FROM USERS WHERE USERS.ID=:userId";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("userId", userId);
          jdbcTemplate.update(sql, params);
-         return "успешно";
     }
 
-    public String updateUser(User user) {
+    public void updateUser(User user) {
         if(user == null)
-            return "пользователь не задан";
+            throw new BadRequestException("пользователь задан некорректно");
         if(user.getId() == null)
-            return "пользователь не существует";
+            throw new NotFoundException("Некорректная карта");
         else {
             //String sql = "UPDATE USERS SET NAME:=name, PIC_URL:=picUrl, BALANCE:=balance WHERE ID:=userId";
             String sql = "UPDATE USERS SET NAME = " + user.getName() + ", PIC_URL = " + user.getPicUrl() + ", BALANCE = " +
                     user.getBalance() + "WHERE ID = " + user.getId();
             MapSqlParameterSource params = new MapSqlParameterSource();
             jdbcTemplate.update(sql, params);
-            return "успешно";
         }
     }
 }

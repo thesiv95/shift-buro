@@ -43,31 +43,34 @@ public class CardsController {
   //объявление не было добавлено), 2 - у автора объявления не достаточно денег на балнсе(объявление не добавлено);
   @PostMapping(CARDS_PATH + "/addCard")
   @ApiOperation(value = "Добавление новой карты")
-  public ResponseEntity<String> addCard(
+  public ResponseEntity<Void> addCard(
           @ApiParam(value = "Данные для новой карты")
           @RequestBody Card card) {
-    String result = service.addCard(card);
-    return ResponseEntity.ok(result);
+    service.addCard(card);
+    return ResponseEntity.ok().build();
   }
 
-  @PostMapping(CARDS_PATH + "/updateStatus")
+  @PostMapping(CARDS_PATH + "/updateStatus" + "/{cardId}")
   @ApiOperation(value = "обновление статуса карты")
-  public ResponseEntity<String> updateStatus(
+  public ResponseEntity<Void> uodateStatus(
           @ApiParam(value = "айди карты")
-          @RequestHeader Integer cardId,
+          @RequestHeader Integer userdId,
           @ApiParam(value = "новый статус")
-          @RequestHeader Boolean status) {
-    String result = service.updateStatus(cardId, status);
-    return ResponseEntity.ok(result);
+          @PathVariable Integer cardId) {
+    service.updateStatus(userdId, cardId);
+    return ResponseEntity.ok().build();
   }
 
-  @PostMapping(CARDS_PATH + "/deleteCard" + "/{cardId}")
+
+  @DeleteMapping(CARDS_PATH + "/deleteCard" + "/{cardId}")
   @ApiOperation(value = "удаление карты")
-  public ResponseEntity<String> deleteCard(
+  public ResponseEntity<Void> deleteCard(
           @ApiParam(value = "айди карты")
-          @PathVariable Integer cardId) {
-    String result = service.deleteCard(cardId);
-    return ResponseEntity.ok(result);
+          @PathVariable Integer cardId,
+          @ApiParam(value = "айди пользователя")
+          @RequestHeader Integer userId) {
+    service.deleteCard(userId, cardId);
+    return ResponseEntity.ok().build();
   }
 
   @GetMapping(CARDS_PATH + "/getTypedCards" + "/{type}")

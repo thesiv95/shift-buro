@@ -21,13 +21,13 @@ public class UserService {
 
     public User getUser(Integer id) { return this.userRepository.getUser(id); }
 
-    public String addUsers(User user) { return this.userRepository.addUser(user); }
+    public void addUsers(User user) { this.userRepository.addUser(user); }
 
-    public String deleteUSer(Integer userId) { return this.userRepository.deleteUser(userId); }
+    public void deleteUSer(Integer userId) { this.userRepository.deleteUser(userId); }
 
-    public String changeBalance(Integer price, Integer recipientId, Integer donorId) {
-        return this.userRepository.changeBalance(price, recipientId, donorId);
+    public void changeBalance(Integer cardId, Integer userId) {
+        this.userRepository.changeBalance(cardId, userId);
     }
 
-    public String updateUser(User user) { return this.userRepository.updateUser(user); }
+    public void updateUser(User user) { this.userRepository.updateUser(user); }
 }

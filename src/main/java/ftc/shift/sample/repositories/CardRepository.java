@@ -1,6 +1,7 @@
 package ftc.shift.sample.repositories;
 
 import ftc.shift.sample.models.Card;
+import ftc.shift.sample.models.User;
 
 import java.util.List;
 
@@ -10,9 +11,9 @@ import java.util.List;
 public interface CardRepository {
     List<Card> getAllCards();
     Card getCard(Integer cardId);
-    String updateStatus(Integer id, Boolean status);
-    String addCard(Card card);
-    String deleteCard(Integer cardId);
+    void updateStatus(Integer userId, Integer cardId);
+    void addCard(Card card, User user);
+    void deleteCard(Integer userId, Integer cardId);
     void initialize();
     List<Card> getTypedCards(String type);
 }
