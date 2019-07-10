@@ -1,0 +1,140 @@
+html,
+body {
+    margin: 0;
+}
+
+body {
+    background: #2fa8b0;
+    background-image: url(https://pp.userapi.com/c849028/v849028932/1dee33/oezHLhO0Vrg.jpg);
+    font-family: Arial, sans-serif;
+}
+
+img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 12px solid #62a2be;
+}
+
+.document {
+    padding: 48px;
+}
+
+.head {
+    background: #2fa8b0;
+    color: #fff;
+    text-align: center;
+    height: 100px;
+    font-size: 24px;
+    line-height: 2;
+}
+
+.users {
+    margin-top: 20px;
+}
+
+.user {
+    margin-top: 10px;
+}
+
+.user_pic {
+    display:inline-block;
+    vertical-align:middle;
+    margin-right: 30px;
+}
+
+.user_name {
+    background-color: rgba(200, 191, 231, 0.5);
+    display:inline-block;
+    vertical-align:middle;
+    -webkit-border-radius: 20px;
+    padding: 30px 160px;
+}
+
+
+.select_user {
+    background-color: #fff;
+    box-shadow: 0 10px 6px -6px #777;
+    position: fixed;
+    padding: 10px;
+    top: 20px;
+    right: 20px;
+}
+
+.select_label {
+    display: block;
+    color: #777;
+    font-size: 12px;
+}
+
+.select_control {
+    
+}
+
+
+
+.new-ad {
+    background-color: #e7e7e7;
+    margin: 20px 300px;
+    padding: 16px;
+}
+
+.new-ad ul {
+    list-style-type: none;
+    list-style-position: outside;
+    width: 750px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.new-ad li {
+    position: relative;
+    padding: 12px;
+}
+
+.field {
+
+}
+
+.field_label {
+    display: inline-block;
+    float: left;
+    width: 100px;
+    margin-top: 4px;
+    padding: 3px;
+}
+
+.field_control {
+    height: 20px;
+    width: 220px;
+    padding: 5px 8px;
+}
+
+.select {
+
+}
+
+.select_control1 {
+    height: 35px;
+    width: 240px;
+}
+
+.button {
+    background: #3ccc86;
+    color: #fff;
+    outline: none;
+    border: none;
+    text-transform: uppercase;
+    border-radius: 4px;
+    height: 40px;
+    width: 300px;
+    line-height: 40px;
+    font-size: 16px;
+}
+
+::-moz-placeholder {
+    color: grey;
+}
+::-webkit-input-placeholder {
+    color: grey;
+} 
