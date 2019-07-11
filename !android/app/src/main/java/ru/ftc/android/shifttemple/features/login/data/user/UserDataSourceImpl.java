@@ -16,7 +16,7 @@ public final class UserDataSourceImpl implements UserDataSource {
 
     @Override
     public void getUsers(Carry<List<User>> carry) {
-        usersApi.getUserList().enqueue(new DefaultCallback(carry));
+        usersApi.getAllUsers().enqueue(new DefaultCallback(carry));
     }
 
     @Override

@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name"><font size="37">Бюро добрых дел</font></string>
+    <string name="create_card_activity_name"><font size="32">Новое объявление</font></string>
+    <string name="card_activity_title">Сделай доброе дело!</string>
     <string name="create_button">Создать</string>
     <string name="next_button">Далее</string>
     <string name="not_selected_user_error">Выберите пользователя</string>
+    <string-array name="spinnerItems">
+        <item>Показать все</item>
+        <item>Просьба</item>
+        <item>Помощь</item>
+    </string-array>
+    <string-array name="spinerItemsForCreateCard">
+        <item>Просьба</item>
+        <item>Помощь</item>
+    </string-array>
 </resources>

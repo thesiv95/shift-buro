@@ -1,7 +1,8 @@
-package ru.ftc.android.shifttemple.features.cards.presentation;
+package ru.ftc.android.shifttemple.features.cards.presentation.CardList;
+
+import android.util.Log;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import ru.ftc.android.shifttemple.features.MvpPresenter;
 import ru.ftc.android.shifttemple.features.cards.domain.CardsInteractor;
@@ -54,26 +55,67 @@ final class CardListPresenter extends MvpPresenter<CardListView> {
 
     private void loadCards() {
         view.showProgress();
-        interactor.loadCards(new Carry<List<Card>>() {
+        int spinnerPosition = view.getSpinnerItemPosition();
+        onSpinerItemSelected(spinnerPosition);
+    }
 
-            @Override
-            public void onSuccess(List<Card> result) {
-                view.showCardList(result);
+    void onSpinerItemSelected(int position) {
+        view.showProgress();
+        switch (position) {
+            case 0:
+                interactor.loadCards(new Carry<List<Card>>() {
+                    @Override
+                    public void onSuccess(List<Card> result) {
+                        view.showCardList(result);
+                        view.hideProgress();
+                    }
+
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        view.hideProgress();
+                        view.showError(throwable.getMessage());
+                    }
+                });
+                break;
+            case 1:
+                interactor.loadRequestCards(new Carry<List<Card>>() {
+                    @Override
+                    public void onSuccess(List<Card> result) {
+                        view.showCardList(result);
+                        view.hideProgress();
+                    }
+
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        view.hideProgress();
+                        view.showError(throwable.getMessage());
+                    }
+                });
+                break;
+            case 2:
+                interactor.loadInvitationCards(new Carry<List<Card>>() {
+                    @Override
+                    public void onSuccess(List<Card> result) {
+                        view.showCardList(result);
+                        view.hideProgress();
+                    }
+
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        view.hideProgress();
+                        view.showError(throwable.getMessage());
+                    }
+                });
+                break;
+            default:
                 view.hideProgress();
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                view.hideProgress();
-                view.showError(throwable.getMessage());
-            }
-
-        });
+                break;
+        }
     }
 
     void onCardSelected(Card card) {
         view.showProgress();
-        interactor.loadCard(card.getId(), new Carry<Card>() {
+        interactor.loadCard(String.valueOf(card.getId()), new Carry<Card>() {
 
             @Override
             public void onSuccess(Card result) {
@@ -92,7 +134,7 @@ final class CardListPresenter extends MvpPresenter<CardListView> {
 
     void onCardLongClicked(Card card) {
         view.showProgress();
-        interactor.deleteCard(card.getId(), new Carry<Success>() {
+        interactor.deleteCard(String.valueOf(card.getId()), new Carry<Success>() {
 
             @Override
             public void onSuccess(Success result) {
@@ -107,26 +149,8 @@ final class CardListPresenter extends MvpPresenter<CardListView> {
         });
     }
 
-    private final AtomicInteger atomicInteger = new AtomicInteger();
-
-    public void onCreateCardClicked() {
-        int id = atomicInteger.incrementAndGet();
-        String name = "Name_" + id;
-        String phone = "Author_" + id;
-        String task = "Ко";
-
-        Card card = new Card(name, phone,task);
-        interactor.createCard(card, new Carry<Card>() {
-            @Override
-            public void onSuccess(Card result) {
-                loadCards();
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                view.showError(throwable.getMessage());
-            }
-        });
+    public void onAddTaskClicked() {
+        view.openCardCreateScreen();
     }
 
 }

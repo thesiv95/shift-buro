@@ -156,6 +156,7 @@ public class DatabaseCardRepository implements CardRepository {
     }
 
     public List<Card> getTypedCards(String type) {
+
         String sql = "SELECT * FROM ADS WHERE ADS.TYPE=:type";
 
         MapSqlParameterSource params = new MapSqlParameterSource()

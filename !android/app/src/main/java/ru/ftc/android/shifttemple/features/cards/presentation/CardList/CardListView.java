@@ -1,4 +1,4 @@
-package ru.ftc.android.shifttemple.features.cards.presentation;
+package ru.ftc.android.shifttemple.features.cards.presentation.CardList;
 
 import java.util.List;
 
@@ -21,4 +21,7 @@ interface CardListView extends MvpView {
 
     void showError(String message);
 
+    void openCardCreateScreen();
+
+    int getSpinnerItemPosition();
 }

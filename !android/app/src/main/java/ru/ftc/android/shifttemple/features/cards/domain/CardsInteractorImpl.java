@@ -27,6 +27,16 @@ public final class CardsInteractorImpl implements CardsRepository, CardsInteract
     }
 
     @Override
+    public void loadInvitationCards(Carry<List<Card>> carry) {
+        repository.loadInvitationCards(carry);
+    }
+
+    @Override
+    public void loadRequestCards(Carry<List<Card>> carry) {
+        repository.loadRequestCards(carry);
+    }
+
+    @Override
     public void loadCard(String id, Carry<Card> carry) {
         repository.loadCard(id, carry);
     }

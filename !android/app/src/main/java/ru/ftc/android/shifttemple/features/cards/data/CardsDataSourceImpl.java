@@ -28,13 +28,23 @@ public final class CardsDataSourceImpl implements CardsDataSource {
     }
 
     @Override
+    public void getInvitationCards(Carry<List<Card>> carry) {
+        cardsApi.getTypedCardList("Помощь").enqueue(new DefaultCallback(carry));
+    }
+
+    @Override
+    public void getRequestCards(Carry<List<Card>> carry) {
+        cardsApi.getTypedCardList("Просьба").enqueue(new DefaultCallback(carry));
+    }
+
+    @Override
     public void getCard(String id, Carry<Card> carry) {
         cardsApi.getCard(id).enqueue(new DefaultCallback(carry));
     }
 
     @Override
     public void createCard(Card card, Carry<Card> carry) {
-        cardsApi.createCard(card).enqueue(new DefaultCallback(carry));
+        cardsApi.addCard(card).enqueue(new DefaultCallback(carry));
     }
 
     @Override

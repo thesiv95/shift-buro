@@ -46,15 +46,15 @@ public final class LoginPresenter extends MvpPresenter<LoginView> {
         if (selectedUser == null) {
             view.showNotSelectedUserError();
         } else {
-            sessionInteractor.setUserAge(selectedUser.getAge());
+            //sessionInteractor.setUserAge(selectedUser.getAge());
             sessionInteractor.setUserBalance(selectedUser.getBalance());
-            sessionInteractor.setUserCity(selectedUser.getCity());
-            sessionInteractor.setUserDescription(selectedUser.getDescription());
+            //sessionInteractor.setUserCity(selectedUser.getCity());
+            //sessionInteractor.setUserDescription(selectedUser.getDescription());
             sessionInteractor.setUserId(selectedUser.getId());
             sessionInteractor.setUserName(selectedUser.getName());
-            sessionInteractor.setUserPhone(selectedUser.getPhoneNumber());
+            //sessionInteractor.setUserPhone(selectedUser.getPhoneNumber());
             sessionInteractor.setUserPicUrl(selectedUser.getPicUrl());
-            sessionInteractor.setUserStatus(selectedUser.getStatus());
+            //sessionInteractor.setUserStatus(selectedUser.getStatus());
             view.openCardListScreen();
         }
     }

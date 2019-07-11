@@ -13,7 +13,7 @@ import java.util.List;
 import com.squareup.picasso.Picasso;
 
 import ru.ftc.android.shifttemple.R;
-import ru.ftc.android.shifttemple.features.Image.CircleImageTransform;
+import ru.ftc.android.shifttemple.features.Image.CircleImageTransformWithBorder;
 import ru.ftc.android.shifttemple.features.login.domain.model.User;
 
 public final class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHolder>{
@@ -69,8 +69,8 @@ public final class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserHold
             userNameView.setText(user.getName());
 
             //Load image from url in imageView and change it to circle
-            int borderColorId = context.getResources().getColor(R.color.colorPrimary);
-            Picasso.get().load(user.getPicUrl()).transform(new CircleImageTransform(borderColorId)).into(imageView);
+            int borderColorId = context.getResources().getColor(R.color.colorTitle);
+            Picasso.get().load(user.getPicUrl()).transform(new CircleImageTransformWithBorder(borderColorId)).into(imageView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

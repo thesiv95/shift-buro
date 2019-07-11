@@ -1,4 +1,4 @@
-package ru.ftc.android.shifttemple.features.cards.presentation;
+package ru.ftc.android.shifttemple.features.cards.presentation.CardList;
 
 import android.content.Context;
 
@@ -9,6 +9,7 @@ import ru.ftc.android.shifttemple.features.cards.data.CardsDataSourceImpl;
 import ru.ftc.android.shifttemple.features.cards.data.CardsRepository;
 import ru.ftc.android.shifttemple.features.cards.data.CardsRepositoryImpl;
 import ru.ftc.android.shifttemple.features.cards.domain.CardsInteractorImpl;
+import ru.ftc.android.shifttemple.features.cards.presentation.CardList.CardListPresenter;
 import ru.ftc.android.shifttemple.features.login.data.SessionDataSource;
 import ru.ftc.android.shifttemple.features.login.data.SessionDataSourceImpl;
 import ru.ftc.android.shifttemple.features.login.data.SessionRepository;

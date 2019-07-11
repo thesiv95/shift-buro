@@ -9,9 +9,9 @@ import ru.ftc.android.shifttemple.features.login.domain.model.User;
 
 public interface UserApi {
 
-    @GET("getAllUsers")
-    Call<List<User>> getUserList();
+    @GET("/users/getAllUsers")
+    Call<List<User>> getAllUsers();
 
-    @GET("books/{id}")
+    @GET("users/getUser/{id}")
     Call<User> getUser(@Path("id") String id);
 }

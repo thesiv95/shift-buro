@@ -19,16 +19,20 @@ import ru.ftc.android.shifttemple.features.cards.domain.model.Success;
 
 public interface CardsApi {
 
-    @GET("books")
+    @GET("/cards/getAllCards")
     Call<List<Card>> getCardList();
 
-    @GET("books/{id}")
+    @GET("/cards/getTypedCards/{type}")
+    Call<List<Card>> getTypedCardList(@Path("type") String type);
+
+
+    @GET("cards/{id}")
     Call<Card> getCard(@Path("id") String id);
 
-    @POST("books")
-    Call<Card> createCard(@Body Card card);
+    @POST("/cards/addCard")
+    Call<Card> addCard(@Body Card card);
 
-    @DELETE("books/{id}")
+    @DELETE("cards/deleteCard/{id}")
     Call<Success> deleteCard(@Path("id") String id);
 
 }

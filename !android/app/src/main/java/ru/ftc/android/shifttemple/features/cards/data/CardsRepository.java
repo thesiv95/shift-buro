@@ -16,6 +16,10 @@ public interface CardsRepository {
 
     void loadCards(Carry<List<Card>> carry);
 
+    void loadInvitationCards(Carry<List<Card>> carry);
+
+    void loadRequestCards(Carry<List<Card>> carry);
+
     void loadCard(String id, Carry<Card> carry);
 
     void createCard(Card card, Carry<Card> carry);

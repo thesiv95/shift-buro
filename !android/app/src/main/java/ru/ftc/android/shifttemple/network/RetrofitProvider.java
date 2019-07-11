@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class RetrofitProvider {
 
-    private static final String BASE_URL = "http://10.9.49.202:8081/";
+    private static final String BASE_URL = "http://10.9.43.62:8081/";
     private static final int CONNECT_TIMEOUT_SECONDS = 2;
 
     private final Retrofit retrofit;

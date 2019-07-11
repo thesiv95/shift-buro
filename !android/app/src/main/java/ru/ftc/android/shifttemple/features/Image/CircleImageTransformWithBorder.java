@@ -7,9 +7,11 @@ import android.graphics.Paint;
 import com.squareup.picasso.Transformation;
 
 
-public class CircleImageTransform implements Transformation {
+public class CircleImageTransformWithBorder implements Transformation {
+    private int borderColorId;
 
-    public CircleImageTransform(){
+    public CircleImageTransformWithBorder(int borderColorId){
+        this.borderColorId = borderColorId;
     }
 
     @Override
@@ -33,15 +35,23 @@ public class CircleImageTransform implements Transformation {
         paint.setAntiAlias(true);
 
         float r = size/2f;
-        canvas.drawCircle(r, r, r, paint);
+        canvas.drawCircle(r, r, r - 4, paint);
 
         squaredBitmap.recycle();
+
+        //Circle border
+        Paint paint1 = new Paint();
+        paint1.setColor(borderColorId);
+        paint1.setStyle(Paint.Style.STROKE);
+        paint1.setAntiAlias(true);
+        paint1.setStrokeWidth(8);
+        canvas.drawCircle(r, r, r - 4, paint1);
 
         return bitmap;
     }
 
     @Override
     public String key() {
-        return "circle";
+        return "circleWithBorder";
     }
 }

@@ -1,4 +1,4 @@
-package ru.ftc.android.shifttemple.features.cards.presentation;
+package ru.ftc.android.shifttemple.features.cards.presentation.CardList;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -56,35 +56,67 @@ final class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardHolder> {
 
     class CardHolder extends RecyclerView.ViewHolder {
 
+        private final TextView CardTaskView;
+        private final TextView CardStatusView;
+        private final TextView CardCategoryView;
         private final TextView CardNameView;
         private final TextView CardPhoneView;
+        private final TextView CardCityView;
+        private final TextView CardDescriptionView;
+        private final TextView CardCostView;
         private final SelectCardListener selectCardListener;
 
         CardHolder(View view, SelectCardListener selectCardListener) {
             super(view);
             this.selectCardListener = selectCardListener;
-            CardNameView = view.findViewById(R.id.book_item_name);
-            CardPhoneView = view.findViewById(R.id.book_item_author);
+            CardTaskView = view.findViewById(R.id.card_item_task);
+            CardStatusView = view.findViewById(R.id.card_item_status);
+            CardCategoryView = view.findViewById(R.id.category_content_text_view);
+            CardNameView = view.findViewById(R.id.fulname_content_text_view);
+            CardPhoneView = view.findViewById(R.id.phone_content_text_view);
+            CardCityView = view.findViewById(R.id.city_content_text_view);
+            CardDescriptionView = view.findViewById(R.id.description_content_text_view);
+            CardCostView = view.findViewById(R.id.cost_text_view);
         }
 
         void bind(final Card card) {
-            CardNameView.setText(card.getName());
-            CardPhoneView.setText(card.getPhone());
+            String task = String.valueOf(card.getTask());
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            String status = "Cтатус: ";
+            status += card.getStatus() ? "Актуально" : "Устарело";
+
+            String category = card.getType();
+            String name = card.getOwnerName();
+            String phone = card.getPhone();
+            String city = card.getCity();
+            String description = card.getDescription();
+
+            String cost = String.valueOf(card.getPrice());
+            cost += " баллов";
+
+            CardTaskView.setText(task);
+            CardStatusView.setText(status);
+            CardCategoryView.setText(category);
+            CardNameView.setText(name);
+            CardPhoneView.setText(phone);
+            CardCityView.setText(city);
+            CardDescriptionView.setText(description);
+            CardCostView.setText(cost);
+
+            /*itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     selectCardListener.onCardSelect(card);
                 }
-            });
+            });*/
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            /*itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     selectCardListener.onCardLongClick(card);
                     return true;
                 }
-            });
+            });*/
 
         }
 

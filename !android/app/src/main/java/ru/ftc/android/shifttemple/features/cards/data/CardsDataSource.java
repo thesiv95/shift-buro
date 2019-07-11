@@ -13,6 +13,10 @@ public interface CardsDataSource {
 
     void getCards(Carry<List<Card>> carry);
 
+    void getInvitationCards(Carry<List<Card>> carry);
+
+    void getRequestCards(Carry<List<Card>> carry);
+
     void getCard(String id, Carry<Card> carry);
 
     void createCard(Card card, Carry<Card> carry);

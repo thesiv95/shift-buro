@@ -14,7 +14,7 @@ import ru.ftc.android.shifttemple.R;
 import ru.ftc.android.shifttemple.features.BaseActivity;
 import ru.ftc.android.shifttemple.features.MvpPresenter;
 import ru.ftc.android.shifttemple.features.MvpView;
-import ru.ftc.android.shifttemple.features.cards.presentation.CardActivity;
+import ru.ftc.android.shifttemple.features.cards.presentation.CardList.CardActivity;
 import ru.ftc.android.shifttemple.features.login.domain.model.User;
 
 public final class LoginActivity extends BaseActivity implements LoginView, LoginJumpView{
@@ -65,23 +65,11 @@ public final class LoginActivity extends BaseActivity implements LoginView, Logi
 
         //For handle creating users:
         List<User> userList = new ArrayList<>();
-        userList.add(new User(1,"Зеленский Максим", 34, "Новосибирск", "https://pp.userapi.com/c846520/v846520705/17a48e/oNDy0fgijM8.jpg?ava=1", "89142553345",
-                100, true, "Человек"));
-        userList.add(new User(2,"Павел Воля", 34, "Новосибирск", "https://sun1-86.userapi.com/c851416/v851416077/6bdc0/Ju8Kpu1XRXQ.jpg?ava=1", "89142553345",
-                100, true, "Человек"));
-        userList.add(new User(3,"Михаил Галустян", 34, "Новосибирск", "https://sun1-20.userapi.com/c639228/v639228720/38500/ODaaqZmKoPw.jpg?ava=1", "89142553345",
-                100, true, "Человек"));
-        userList.add(new User(4,"Дмитрий Билан", 34, "Новосибирск", "https://sun1-21.userapi.com/c844723/v844723134/1908f7/79z2OB-kjro.jpg?ava=1", "89142553345",
-                100, true, "Человек"));
+        userList.add(new User("Зеленский Максим","https://pp.userapi.com/c846520/v846520705/17a48e/oNDy0fgijM8.jpg?ava=1",100));
+        userList.add(new User("Павел Воля", "https://sun1-86.userapi.com/c851416/v851416077/6bdc0/Ju8Kpu1XRXQ.jpg?ava=1",100));
+        userList.add(new User("Михаил Галустян", "https://sun1-20.userapi.com/c639228/v639228720/38500/ODaaqZmKoPw.jpg?ava=1",100));
+        userList.add(new User("Дмитрий Билан", "https://sun1-21.userapi.com/c844723/v844723134/1908f7/79z2OB-kjro.jpg?ava=1",100));
 
-        userList.add(new User(1,"Зеленский Максим", 34, "Новосибирск", "https://pp.userapi.com/c846520/v846520705/17a48e/oNDy0fgijM8.jpg?ava=1", "89142553345",
-                100, true, "Человек"));
-        userList.add(new User(2,"Павел Воля", 34, "Новосибирск", "https://sun1-86.userapi.com/c851416/v851416077/6bdc0/Ju8Kpu1XRXQ.jpg?ava=1", "89142553345",
-                100, true, "Человек"));
-        userList.add(new User(3,"Михаил Галустян", 34, "Новосибирск", "https://sun1-20.userapi.com/c639228/v639228720/38500/ODaaqZmKoPw.jpg?ava=1", "89142553345",
-                100, true, "Человек"));
-        userList.add(new User(4,"Дмитрий Билан", 34, "Новосибирск", "https://sun1-21.userapi.com/c844723/v844723134/1908f7/79z2OB-kjro.jpg?ava=1", "89142553345",
-                100, true, "Человек"));
         adapter.setUserList(userList);
         //
     }

@@ -26,6 +26,16 @@ public final class CardsRepositoryImpl implements CardsRepository {
     }
 
     @Override
+    public void loadInvitationCards(Carry<List<Card>> carry) {
+        dataSource.getInvitationCards(carry);
+    }
+
+    @Override
+    public void loadRequestCards(Carry<List<Card>> carry) {
+        dataSource.getRequestCards(carry);
+    }
+
+    @Override
     public void loadCard(String id, Carry<Card> carry) {
         dataSource.getCard(id, carry);
     }
