@@ -9,8 +9,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -53,11 +55,11 @@ public class UsersController {
 
     //метода позволяет удалить пользователя, на вход получает число - айди пользователя, котрого надо удалить
     //возвращает переменную типа boolean (0 - не удалось удалить, не 0 - удалось)
-    @DeleteMapping(USERS_PATH + "/deleteUser")
+    @DeleteMapping(USERS_PATH + "/deleteUser" + "/{userId}")
     @ApiOperation(value = "Удаление пользователя")
     public ResponseEntity<Void> deleteUser(
             @ApiParam(value = "Айди для удаления")
-            @RequestHeader Integer userId) {
+            @PathVariable Integer userId) {
         service.deleteUSer(userId);
         return ResponseEntity.ok().build();
     }
@@ -68,8 +70,6 @@ public class UsersController {
     @PostMapping(USERS_PATH + "/changeBalance" + "/{cardId}")
     @ApiOperation(value = "Изменение баланса при сделке")
     public ResponseEntity<Void> changeBalance(
-            //@ApiParam(value = "Цена сделки")
-            ///@RequestHeader Integer price,
             @ApiParam(value = "Айди получателя")
             @PathVariable Integer cardId,
             @ApiParam(value = "Айди донора")
@@ -84,7 +84,7 @@ public class UsersController {
     @ApiOperation(value = "обновление информации о пользователе")
     public ResponseEntity<Void> updateUser(
             @ApiParam(value = "пользователь с новой информацией")
-            @RequestBody User user) {
+            @RequestBody  User user) {
         service.updateUser(user);
         return ResponseEntity.ok().build();
     }

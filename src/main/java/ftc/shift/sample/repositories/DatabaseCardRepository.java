@@ -36,7 +36,7 @@ public class DatabaseCardRepository implements CardRepository {
     public void initialize() {
         // Подразумевается, что H2 работает в in-memory режиме и таблицы необходимо создавать при каждом старте приложения
         // SQL запросы для создания таблиц       ;
-
+        //crate table if not exist ADS
         String createCardsTableSql = "create table ADS (" +
                 "ID INT PRIMARY KEY AUTO_INCREMENT," +
                 "TYPE VARCHAR(255)," +
@@ -93,6 +93,8 @@ public class DatabaseCardRepository implements CardRepository {
     public void addCard(Card card, User user) {
         if (!checkCard(card))
             throw new BadRequestException("объявление задано некорректно");
+        if (card.getPrice() < 50)
+            throw new BadRequestException("некорректно задана цена");
         if (user.getBalance() < card.getPrice())
             throw new BadRequestException("У вас недостаточно денег");
         else {
@@ -156,7 +158,6 @@ public class DatabaseCardRepository implements CardRepository {
     }
 
     public List<Card> getTypedCards(String type) {
-
         String sql = "SELECT * FROM ADS WHERE ADS.TYPE=:type";
 
         MapSqlParameterSource params = new MapSqlParameterSource()

@@ -2,6 +2,7 @@ package ftc.shift.sample.models;
 
 import io.swagger.annotations.ApiModelProperty;
 
+
 public class User {
     @ApiModelProperty(value = "ID пользователя", required = true)
     private Integer id;

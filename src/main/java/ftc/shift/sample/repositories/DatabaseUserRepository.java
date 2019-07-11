@@ -18,7 +18,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Реализиция, хранящая все данные в БД
@@ -36,6 +38,9 @@ public class DatabaseUserRepository implements UserRepository {
 
     @Autowired
     private UserExtractor userExtractor;
+
+    @Autowired
+    private CardExtractor cardExtractor;
 
     @Autowired
     private CardRepository cardRepository;
@@ -62,33 +67,42 @@ public class DatabaseUserRepository implements UserRepository {
         return all;
     }
 
+
+    private void checkUser (User user) {
+        if (user == null)
+            throw new BadRequestException("пользователь не существует");
+        if (user.getPicUrl() == "")
+            throw new BadRequestException("нет ссылки на аву");
+        if (user.getPicUrl() == null)
+            throw new BadRequestException("Нужна ава");
+        if (user.getBalance() < 50)
+            throw new BadRequestException("баланс задан некорректно");
+        if (user.getName() == "")
+            throw new BadRequestException("нет имя");
+        if (user.getName() == null)
+            throw new BadRequestException("Нужна имя");
+    }
+
     // Добавить пользователя
     public void addUser(User user){
-        if (user == null)
-            throw new BadRequestException("Пользователь задан некорректно");
-        else {
-            String insertUserSql = "INSERT INTO USERS (NAME, PIC_URL, BALANCE) " +
-                    "values (?, ?, ?)";
-            KeyHolder holder = new GeneratedKeyHolder();
-
-            jdbcTemplate.getJdbcTemplate().update(new PreparedStatementCreator() {
-
-                @Override
-                public PreparedStatement createPreparedStatement(Connection connection)
-                        throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(insertUserSql.toString(),
-                            Statement.RETURN_GENERATED_KEYS);
-                    ps.setString(1, user.getName());
-                    ps.setString(2, user.getPicUrl());
-                    ps.setInt(3, user.getBalance());
-                    return ps;
+        checkUser(user);
+        String insertUserSql = "INSERT INTO USERS (NAME, PIC_URL, BALANCE) " +
+                "values (?, ?, ?)";
+        KeyHolder holder = new GeneratedKeyHolder();
+        jdbcTemplate.getJdbcTemplate().update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection connection)
+                    throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(insertUserSql.toString(),
+                        Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, user.getName());
+                ps.setString(2, user.getPicUrl());
+                ps.setInt(3, user.getBalance());
+                return ps;
                 }
             }, holder);
-
             Integer newPersonId = holder.getKey().intValue();
             user.setId(newPersonId);
-        }
-
     }
 
     public void changeBalance(Integer cardId, Integer userId) {
@@ -99,10 +113,8 @@ public class DatabaseUserRepository implements UserRepository {
         User donor = getUser(cardRepository.getCard(cardId).getOwnerId());
         User recip = getUser(userId);
         Integer price = cardRepository.getCard(cardId).getPrice();
-        if (price < 50)
-            throw new BadRequestException("некорректно задана цена");
         if (donor.getBalance() < price)
-            throw new BadRequestException("у Вас не хватает денег");
+            throw new BadRequestException("у автора объявления не хватает денег");
         else {
             cardRepository.updateStatus(userId, cardId);
             Integer recBal = recip.getBalance() + price;
@@ -141,6 +153,13 @@ public class DatabaseUserRepository implements UserRepository {
     public void deleteUser(Integer userId) {
         if (getUser(userId) == null)
             throw new NotFoundException("Некорректная карта");
+
+        String AdsSql = "SELECT * FROM ADS WHERE OWNER_ID=" + userId;
+        MapSqlParameterSource AdsParams = new MapSqlParameterSource();
+        List<Card> Ads = jdbcTemplate.query(AdsSql, AdsParams, cardExtractor);
+        for (int i = 0; i <Ads.size(); i++) {
+            cardRepository.deleteCard(userId, Ads.get(i).getId());
+        }
         String sql = "DELETE FROM USERS WHERE USERS.ID=:userId";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("userId", userId);
@@ -153,7 +172,6 @@ public class DatabaseUserRepository implements UserRepository {
         if(user.getId() == null)
             throw new NotFoundException("Некорректная карта");
         else {
-            //String sql = "UPDATE USERS SET NAME:=name, PIC_URL:=picUrl, BALANCE:=balance WHERE ID:=userId";
             String sql = "UPDATE USERS SET NAME = " + user.getName() + ", PIC_URL = " + user.getPicUrl() + ", BALANCE = " +
                     user.getBalance() + "WHERE ID = " + user.getId();
             MapSqlParameterSource params = new MapSqlParameterSource();
