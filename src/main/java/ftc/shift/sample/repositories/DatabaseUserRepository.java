@@ -160,8 +160,6 @@ public class DatabaseUserRepository implements UserRepository {
     public void updateUser(User user) {
         if(user == null)
             throw new BadRequestException("Такого пользователя не существует");
-        if(user.getId() == null)
-            throw new NotFoundException("Такого объявления у этого пользователя не существует");
         else {
             String sql = "UPDATE USERS SET NAME = " + user.getName() + ", PIC_URL = " + user.getPicUrl() + ", BALANCE = " +
                     user.getBalance() + "WHERE ID = " + user.getId();
