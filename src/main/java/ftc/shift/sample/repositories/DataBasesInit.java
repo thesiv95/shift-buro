@@ -47,9 +47,27 @@ public class DataBasesInit {
             userDB.initialize();
             cardDB.initialize();
         }
-        //userDB.deleteUser(3);
-        User user = new User("123", null, 51);
-        userDB.addUser(user);
+
+
+        // Demo-data
+        String[] cities = new String[]{"Москва", "Санкт-Петербург", "Новосибирск"};
+
+        User u1 = new User("Марина", "https://sun4-17.userapi.com/c845121/v845121075/ab5ae/YBZSUcDkTLw.jpg", 100);
+        userDB.addUser(u1);
+        User u2 = new User("Николай", "https://sun4-16.userapi.com/c848616/v848616895/1d8f61/qVhrdccO5-c.jpg", 100);
+        userDB.addUser(u2);
+        User u3 = new User("Анатолий", "https://sun4-17.userapi.com/c850224/v850224067/db0a6/HUr1xk4qxSU.jpg", 100);
+        userDB.addUser(u3);
+        Card c1 = new Card(2, "Владислав", "Предложение", "Присмотрю за питомцами", "Присмотрю за вашими домашними животными, пока вы в отпуске", true, 50, cities[2], "+79131234567");
+        cardDB.addCard(c1, u1);
+        Card c2 = new Card(1, "Марина", "Просьба", "Сделать уборку в квартире", "Пожалуйста, помогите сделать уборку в квартире пожилого человека", false, 60, cities[2], "+79131234576");
+        cardDB.addCard(c2, u2);
+        Card c3 = new Card(3, "Елена", "Просьба", "Решить пример по физике (11 класс)", "Мой сын был бы рад помощи, очень сложный пример задачи для подготовки к ЕГЭ", true, 70, cities[0], "+79131234111");
+        cardDB.addCard(c3, u3);
+        Card c4 = new Card(2, "Николай", "Предложение", "Предоставлю услуги переводчика с английского", "Переведу статью, рецензию, заметку и так далее", false, 100, cities[1], "+79131114123");
+        cardDB.addCard(c4, u3);
+
+
     }
 }
 
