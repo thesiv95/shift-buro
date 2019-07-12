@@ -65,7 +65,7 @@ public class DatabaseCardRepository implements CardRepository {
     }
     public void updateStatus(Integer userid, Integer cardid) {
         if (userid == getCard(cardid).getOwnerId())
-            throw new BadRequestException("самому себе меняешь");
+            throw new BadRequestException("Самому себе нельзя перечислить баллы");
         Boolean newStatus = !(getCard(cardid).getStatus());
         String updateCardStatusSql = "UPDATE ADS SET STATUS = "
                 + newStatus + " WHERE ID = " + cardid;
@@ -88,7 +88,7 @@ public class DatabaseCardRepository implements CardRepository {
 
         if (Character.toString(string.charAt(0)).equals("+") && Character.toString(string.charAt(1)).equals("7") && string.length() == 12)
             return true;
-        else throw new BadRequestException("Телефон задан некорректно");
+        else throw new BadRequestException("Телефон задан некорректно. Формат +7ХХХХХХХХХХ");
     }
 
     private Boolean userBalanceIsValid (Card card, User user) {
@@ -106,15 +106,15 @@ public class DatabaseCardRepository implements CardRepository {
                 totalCount += cards.get(i).getPrice();
         }
         if (totalCount > user.getBalance())
-            throw new BadRequestException("У тебя не хватает денег");
+            throw new BadRequestException("Не хватает баллов");
         else return true;
     }
 
     public void addCard(Card card, User user) {
         if (!checkCard(card))
-            throw new BadRequestException("объявление задано некорректно");
+            throw new BadRequestException("Такого объявления не существует");
         if (card.getPrice() < 50)
-            throw new BadRequestException("слишком дешево");
+            throw new BadRequestException("Цена не может быть меньше 50 баллов");
         if (userBalanceIsValid(card, user)) {
             String insertUserSql = "INSERT INTO ADS (TYPE, TASK, OWNER_NAME, PHONE, CITY, DESCRIPTION, PRICE, STATUS, OWNER_ID)" +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -148,7 +148,7 @@ public class DatabaseCardRepository implements CardRepository {
                 .addValue("id", cardId);
         List<Card> cards = jdbcTemplate.query(sql, params, cardExtractor);
         if (cards.isEmpty()) {
-            throw new NotFoundException("Некорректная карта");
+            throw new NotFoundException("Такого объявления не существует");
         }
         return cards.get(0);
     }
@@ -156,9 +156,9 @@ public class DatabaseCardRepository implements CardRepository {
     //
     public void deleteCard(Integer userId, Integer cardId) {
         if (getCard(cardId) == null)
-            throw new NotFoundException("Некорректная карта");
+            throw new NotFoundException("Такого объявления не существует");
         if(userId != getCard(cardId).getOwnerId())
-            throw new BadRequestException("нельзя удалять чужие карты");
+            throw new BadRequestException("Нельзя удалять чужие объявления!");
         else {
             String sql = "DELETE FROM ADS WHERE ID=:cardId";
             MapSqlParameterSource params = new MapSqlParameterSource()

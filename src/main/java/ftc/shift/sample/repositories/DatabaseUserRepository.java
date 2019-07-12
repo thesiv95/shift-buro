@@ -68,17 +68,17 @@ public class DatabaseUserRepository implements UserRepository {
 
     private void checkUser (User user) {
         if (user == null)
-            throw new BadRequestException("пользователь не существует");
+            throw new BadRequestException("Пользователь не существует");
         if (user.getPicUrl() == "")
-            throw new BadRequestException("нет ссылки на аву");
+            throw new BadRequestException("Нет ссылки на аву");
         if (user.getPicUrl() == null)
             throw new BadRequestException("Нужна ава");
         if (user.getBalance() < 50)
-            throw new BadRequestException("баланс задан некорректно");
+            throw new BadRequestException("Баланс задан некорректно - не меньше 50");
         if (user.getName() == "")
-            throw new BadRequestException("нет имя");
+            throw new BadRequestException("Имя не может быть пустым");
         if (user.getName() == null)
-            throw new BadRequestException("Нужна имя");
+            throw new BadRequestException("Нужно указать свое имя");
     }
 
     // Добавить пользователя
@@ -107,12 +107,12 @@ public class DatabaseUserRepository implements UserRepository {
         if (cardRepository.getCard(cardId).getStatus() == false)
             throw new BadRequestException("Объявление неактивно");
         if (userId == cardRepository.getCard(cardId).getOwnerId())
-            throw new BadRequestException("самому себе нельзя");
+            throw new BadRequestException("Самому себе нельзя перечислить баллы");
         User cardOwner = getUser(cardRepository.getCard(cardId).getOwnerId());
         User user = getUser(userId);
         Integer price = cardRepository.getCard(cardId).getPrice();
         if (cardOwner.getBalance() < price)
-            throw new BadRequestException("у автора объявления не хватает денег");
+            throw new BadRequestException("У автора объявления не хватает баллов");
         else {
             cardRepository.updateStatus(userId, cardId);
             Integer userBal = user.getBalance();
@@ -144,7 +144,7 @@ public class DatabaseUserRepository implements UserRepository {
 
     public void deleteUser(Integer userId) {
         if (getUser(userId) == null)
-            throw new NotFoundException("Некорректный юзер");
+            throw new NotFoundException("Такого пользователя не существует");
         String AdsSql = "SELECT * FROM ADS WHERE OWNER_ID=" + userId;
         MapSqlParameterSource AdsParams = new MapSqlParameterSource();
         List<Card> Ads = jdbcTemplate.query(AdsSql, AdsParams, cardExtractor);
@@ -159,9 +159,9 @@ public class DatabaseUserRepository implements UserRepository {
 
     public void updateUser(User user) {
         if(user == null)
-            throw new BadRequestException("пользователь задан некорректно");
+            throw new BadRequestException("Такого пользователя не существует");
         if(user.getId() == null)
-            throw new NotFoundException("Некорректная карта");
+            throw new NotFoundException("Такого объявления у этого пользователя не существует");
         else {
             String sql = "UPDATE USERS SET NAME = " + user.getName() + ", PIC_URL = " + user.getPicUrl() + ", BALANCE = " +
                     user.getBalance() + "WHERE ID = " + user.getId();
