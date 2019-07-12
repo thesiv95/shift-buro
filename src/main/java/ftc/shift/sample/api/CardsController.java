@@ -52,12 +52,12 @@ public class CardsController {
 
   @PostMapping(CARDS_PATH + "/updateStatus" + "/{cardId}")
   @ApiOperation(value = "обновление статуса карты")
-  public ResponseEntity<Void> uodateStatus(
+  public ResponseEntity<Void> updateStatus(
           @ApiParam(value = "айди карты")
-          @RequestHeader Integer userdId,
+          @RequestHeader Integer userId,
           @ApiParam(value = "новый статус")
           @PathVariable Integer cardId) {
-    service.updateStatus(userdId, cardId);
+    service.updateStatus(userId, cardId);
     return ResponseEntity.ok().build();
   }
 

@@ -54,9 +54,9 @@ public class DatabaseCardRepository implements CardRepository {
     }
 
 
-    // Загрузить все карточки
+    // Загрузить все карточки, которые активны
     public List<Card> getAllCards() {
-        String sql = "select * from ADS";
+        String sql = "select * from ADS WHERE ADS.STATUS = TRUE";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
 
@@ -168,11 +168,10 @@ public class DatabaseCardRepository implements CardRepository {
     }
 
     public List<Card> getTypedCards(String type) {
-        String sql = "SELECT * FROM ADS WHERE ADS.TYPE=:type";
+        String sql = "SELECT * FROM ADS WHERE ADS.TYPE=:type AND ADS.STATUS = TRUE";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("type", type);
         List<Card> cards = jdbcTemplate.query(sql, params, cardExtractor);
-        if (cards.isEmpty()) { return null; }
         return cards;
     }
 }
