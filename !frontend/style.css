@@ -52,6 +52,7 @@ body {
     padding: 30px 160px;
 }
 
+
 .header {
     height: 100px;
     font-size: 24px;
@@ -82,11 +83,11 @@ body {
 
 .type {
     display: inline-block;
-    margin-right: 250px;
+    margin-right: 150px;
 }
 
-.type select {
-    
+.type_select {
+    border-radius: 5px;
 }
 
 .new-ad {
@@ -95,38 +96,191 @@ body {
 }
 
 .cards {
-    background-color: white;
-    margin: 30px 250px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 350px;
 }
 
 .card {
+    background-color: transparent;
+    position: relative;
+    /* height: 250px; */
+    padding: 30px 30px 0px;
+}
 
+.card:after {
+    background-color: #e7e7e7;
+    position: absolute;
+    content: '';
+    top: 10px;
+    left: -10px;
+    right: -10px;
+    bottom: 10px;
+    z-index: -1;
+    
+    /* border-radius: 10px; */
 }
 
 .card_task {
-
+    background-color: #92e0e4;
+    border-radius: 20px;
+    padding: 10px;
 }
 
 .card_status {
 
 }
 
-.card_type {
+.card_fields {
 
 }
 
-.card_owner-name {
-
+.card_fields_line {
+    text-align: left;
 }
 
-.card_phone {
-
+.card_fields_line_title { /* иожет убрать какой-нибудь из лэйблов?*/
+    display: inline-block;
+    width: 50px;
+    margin-right: 50px;
 }
 
-.card_city {
-
+.card_fields_line_field {
+    background-color: #c4c4c4;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 185px;
 }
 
 .card_description {
+    background-color: #c4c4c4;
+}
 
+.card_accept {
+    position: relative;
+}
+
+.card_accept_button {
+    display: inline-block;
+}
+
+.card_button {
+    background-color: #92e0e4;
+    border: none;
+    width: 100px;
+    height:  30px;
+    border-radius: 20px;
+    margin-top: 15px;
+    margin-right: 165px;
+}
+
+.card_price {
+    background-color: #fed466;
+    display: table-cell;
+    vertical-align: middle;
+    position: relative;
+    top: -30px;
+    left: 175px;
+    width: 100px;
+    height:  30px;
+}
+
+.ad {
+    background-color: #e7e7e7;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    width: 310px;
+    height: 350px;
+    padding: 30px 30px 0px;
+}
+
+.label {
+    float: left;
+    margin-bottom: 5px;
+}
+
+.span {
+    display: inline-block;
+    text-align: left;
+    vertical-align: top;
+    width: 50px;
+    margin-right: 50px;
+}
+
+.select {
+    background-color: #c4c4c4;
+    border-color: transparent;
+    width: 189px;
+}
+
+.textarea {
+    background-color: #c4c4c4;
+    border-color: transparent;
+    width: 183px;
+    margin-bottom: -4px;
+}
+
+.input {
+    background-color: #c4c4c4;
+    border-color: transparent;
+    width: 185px;
+}
+
+.label-description {
+    float: left;
+}
+
+.span-description {
+    float: left;
+    margin-top: 15px;
+}
+
+.textarea-description {
+    background-color: #c4c4c4;
+    border-color: transparent;
+    width: 290px;
+    height: 80px;
+}
+
+.label-price {
+    float: left;
+    margin-top: 15px;
+}
+
+.span-price {
+    display: inline-block;
+    text-align: left;
+    vertical-align: top;
+    width: 50px;
+    /* margin-right: 50px; */
+}
+
+.input-price {
+    background-color: #c4c4c4;
+    border: none;
+    width: 239px;
+}
+
+.add {
+    float: left;
+}
+
+.add_button {
+    background-color: #fed466;
+    display: inline-block;
+    border: none;
+    /* text-align: left; */
+    /* vertical-align: top; */
+    width: 100px;
+    height: 30px;
+    margin-top: 20px;
+    margin-left: 30px;
+    margin-right: 100px; 
+}
+
+.cancel_button {
+    
 }

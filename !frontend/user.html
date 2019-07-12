@@ -7,9 +7,9 @@
             content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="shortcut icon" href="/Единорог.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/Unicorn.ico" type="image/x-icon">
     <link rel="stylesheet" href="/style.css" />
-    <title>Сделай доброе дело!</title>
+    <title>Сделай доброе дело! — Бюро добрых дел</title>
 </head>
 <body>
     <div class="document">
@@ -24,41 +24,22 @@
         <div class="type">
             <select class="type_select">
                 <option value="select" selected>Выберите категорию</option>
-                <option value="request">Просьба</option>
-                <option value="help">Помощь</option>
+                <option value="Просьба">Просьба</option>
+                <option value="Предложение">Предложение</option>
             </select>
         </div>
         <div class="new-ad">
-            <img src="https://img.icons8.com/flat_round/64/000000/plus.png">
+            <a id="link" href="newAd.html">
+                <img src="https://img.icons8.com/flat_round/64/000000/plus.png">
+            </a>
         </div>
 
-        <div class="cards" id="cards">
-            <!-- <div id="card1"></div>
-            <div id="card2"></div>
-            <div id="card3"></div>
-            <div id="card4"></div>
-            <div id="card5"></div> -->
-            <!-- <div id="card1">
-                    <button class="button" type="onclick" id="button1">Принять</button>
-                </div>
-                <div id="card2">
-                    <button class="button" type="onclick" id="button2">Принять</button>
-                </div>
-                <div id="card3">
-                    <button class="button" type="onclick" id="button3">Принять</button>
-                </div>
-                <div id="card4">
-                    <button class="button" type="onclick" id="button4">Принять</button>
-                </div>
-                <div id="card5">
-                    <button class="button" type="onclick" id="button5">Принять</button>
-                </div> -->
-        </div>
+        <div class="cards" id="cards"></div>
 
     </div>
 
-    <script src="/utils.js"></script>
-    <script src="/user.js"></script>
-    <script src="/cards.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/user.js"></script>
+    <script src="/js/cards.js"></script>
 </body>
 </html>

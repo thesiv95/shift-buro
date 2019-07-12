@@ -7,79 +7,64 @@
             content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="/styleForNewAd.css" />
-    <title>Новое объявление</title>
+    <link rel="shortcut icon" href="/Unicorn.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/style.css" />
+    <title>Новое объявление — Бюро добрых дел</title>
 </head>
 <body>
     <div class="document">
-        <div class="select_user">
-            <span class="select_label">Пользователь</span>
-            <select class="select_control" id="select_control" name="userID">
-
-            </select>
-        </div>
         <div class="head">
             <h1>Новое объявление</h1>
         </div>
 
-        <div class="new-ad">
-            <form id="new-ad">
-                <ul>
-                    <li>
-                        <label class="field">
-                            <span class="field_label">Описание</span>
-                            <textarea class="field_control" name="TASK"></textarea>
-                        </label>
-                    </li>
-
-                    <li>
-                        <label class="field">
-                            <span class="field_label">Имя</span>
-                            <input class="field_control" name="NAME" placeholder="Эвелина Бисерова" />
-                        </label>
-                    </li>
-
-                    <li>
-                        <label class="field">
-                            <span class="field_label">Телефон</span>
-                            <input class="field_control" name="PHONE" placeholder="+7(912)345-67-89" />
-                        </label>
-                    </li>
-
-                    <li>
-                        <label class="field">
-                            <span class="field_label">Ваш возраст</span>
-                            <input class="field_control" name="AGE" />
-                        </label>
-                    </li>
-
-                    <li>
-                        <label class="select">
-                            <span class="field_label">Город</span>
-                            <select class="select_control1" name="CITY">
-                                <option value="Москва">Москва</option>
-                                <option value="Санкт-Петербург">Санкт-Петербург</option>
-                                <option value="Новосибирск">Новосибирск</option>
-                                <option value="Казань">Казань</option>
-                                <option value="Екатеринбург">Екатеринбург</option>
-                                <option value="Сочи">Сочи</option>
-                                <option value="Воронеж">Воронеж</option>
-                                <option value="Ростов-на-Дону">Ростов-на-Дону</option>
-                                <option value="Омск">Омск</option>
-                                <option value="Другой">Другой...</option>
-                            </select>
-                        </label>
-                    </li>
-
-                    <li>
-                        <button class="button" type="submit">Создать</button>
-                    </li>
-                </ul>
+        <div class="ad">
+            <form id="ad">
+                <label class="label">
+                    <span class="span">Категория:</span>
+                    <select class="select">
+                        <option value="request" selected>Просьба</option>
+                        <option value="offer">Предложение</option>
+                    </select>
+                </label>
+                <label class="label">
+                    <span class="span">Название:</span>
+                    <textarea class="textarea" name="TASK"></textarea>
+                </label>
+                <label class="label">
+                    <span class="span">Имя:</span>
+                    <input class="input" name="OWNERNAME"></input>
+                </label>
+                <label class="label">
+                    <span class="span">Телефон:</span>
+                    <input class="input" name="PHONE"></input>
+                </label>
+                <label class="label">
+                    <span class="span">Город:</span>
+                    <select class="select">
+                        <option value="Moscow" selected>Москва</option>
+                        <option value="Saint-Petersburg">Санкт-Петербург</option>
+                        <option value="Novosibirsk">Новосибирск</option>
+                    </select>
+                </label>
+                <label class="label-description">
+                    <div>
+                        <span class="span-description">Описание:</span>
+                    </div>
+                    <textarea class="textarea-description" name="DESCRIPTION"></textarea>
+                </label>
+                <label class="label-price">
+                    <span class="span-price">Цена:</span>
+                    <input class="input-price" name="PRICE"></input>
+                </label>
+                <div class="add">
+                    <button class="add_button" type="submit" id="OK">ОК</button>
+                    <a id="link" href="user.html">Отмена</a>
+                </div>
             </form>
         </div>
     </div>
 
-    <script src="/utilsForNewAd.js"></script>
-    <script src="/newAd.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/input.js"></script>
 </body>
 </html>

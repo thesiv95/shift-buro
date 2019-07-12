@@ -14,7 +14,7 @@ const renderUser = user => `
 
 // Вывод списка всех пользователей
 const getAllUsers = function() {
-  createRequest({ path: "USERS", method: "GET"})
+  createRequest({ path: "USERS", method: "GET"}) // ПУТЬ И ЗАПРОС
     .then(response => {
       document.querySelector("#users").innerHTML = response
         .map(renderUser)

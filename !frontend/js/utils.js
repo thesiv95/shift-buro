@@ -53,7 +53,7 @@ const createRequest = (options, queryOptions, body) => {
     method: options.method || "GET",
     body: body ? JSON.stringify(body) : undefined
   }).then(response => {
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 201) {
       return response.json();
     } else {
       throw response.status;
