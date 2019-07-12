@@ -70,9 +70,9 @@ public class UsersController {
     @PostMapping(USERS_PATH + "/changeBalance" + "/{cardId}")
     @ApiOperation(value = "Изменение баланса при сделке")
     public ResponseEntity<Void> changeBalance(
-            @ApiParam(value = "Айди получателя")
+            @ApiParam(value = "Айди карточки на которой происходит обмен")
             @PathVariable Integer cardId,
-            @ApiParam(value = "Айди донора")
+            @ApiParam(value = "Айди пользователя")
             @RequestHeader Integer userId) {
         service.changeBalance(cardId, userId);
         return ResponseEntity.ok().build();

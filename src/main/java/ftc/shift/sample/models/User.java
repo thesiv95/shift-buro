@@ -14,7 +14,7 @@ public class User {
     private String picUrl;
 
     @ApiModelProperty(value = "баланс", required = true)
-    private Integer balance;
+    private Integer balance = 50;
 
     public User() {
 

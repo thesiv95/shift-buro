@@ -60,9 +60,7 @@ public class DatabaseUserRepository implements UserRepository {
 
     public List<User> getAllUsers() {
         String sql = "select * from USERS";
-
         MapSqlParameterSource params = new MapSqlParameterSource();
-
         List<User> all = jdbcTemplate.query(sql, params, userExtractor);
         return all;
     }
@@ -109,51 +107,44 @@ public class DatabaseUserRepository implements UserRepository {
         if (cardRepository.getCard(cardId).getStatus() == false)
             throw new BadRequestException("Объявление неактивно");
         if (userId == cardRepository.getCard(cardId).getOwnerId())
-            throw new BadRequestException("Сам у себя покупаешь");
-        User donor = getUser(cardRepository.getCard(cardId).getOwnerId());
-        User recip = getUser(userId);
+            throw new BadRequestException("самому себе нельзя");
+        User cardOwner = getUser(cardRepository.getCard(cardId).getOwnerId());
+        User user = getUser(userId);
         Integer price = cardRepository.getCard(cardId).getPrice();
-        if (donor.getBalance() < price)
+        if (cardOwner.getBalance() < price)
             throw new BadRequestException("у автора объявления не хватает денег");
         else {
             cardRepository.updateStatus(userId, cardId);
-            Integer recBal = recip.getBalance() + price;
-            Integer donBal = donor.getBalance() - price;
-
-            // добавляем
-            String addBallsSql = "UPDATE USERS SET BALANCE = " + recBal + " WHERE ID = " + userId;
-
-            // Снимаем баллы у донора
-            String removeBallsSql = "UPDATE USERS SET BALANCE = " + donBal + " WHERE ID = " + cardRepository.getCard(cardId).getOwnerId();
-
-            MapSqlParameterSource params2 = new MapSqlParameterSource()
-                    .addValue("price", price)
-                    .addValue("recipientId", userId)
-                    .addValue("donorId", cardRepository.getCard(cardId).getOwnerId());
-
+            Integer userBal = user.getBalance();
+            Integer ownerBal = cardOwner.getBalance();
+            if (cardRepository.getCard(cardId).getType().equals("Просьба")) {
+                userBal += price;
+                ownerBal -= price;
+            }
+            else if (cardRepository.getCard(cardId).getType().equals("Предложение")){
+                userBal -= price;
+                ownerBal += price;
+            }
+            String addBallsSql = "UPDATE USERS SET BALANCE = " + userBal + " WHERE ID = " + userId;
+            String removeBallsSql = "UPDATE USERS SET BALANCE = " + ownerBal + " WHERE ID = " + cardRepository.getCard(cardId).getOwnerId();
+            MapSqlParameterSource params2 = new MapSqlParameterSource();
             jdbcTemplate.update(addBallsSql, params2);
             jdbcTemplate.update(removeBallsSql, params2);
         }
     }
 
     public User getUser(Integer id) {
-
         String sql = "SELECT * FROM USERS WHERE ID=:id";
-
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", id);
-
         List<User> users = jdbcTemplate.query(sql, params, userExtractor);
-
         if (users.isEmpty()) { return null; }
-
         return users.get(0);
        }
 
     public void deleteUser(Integer userId) {
         if (getUser(userId) == null)
-            throw new NotFoundException("Некорректная карта");
-
+            throw new NotFoundException("Некорректный юзер");
         String AdsSql = "SELECT * FROM ADS WHERE OWNER_ID=" + userId;
         MapSqlParameterSource AdsParams = new MapSqlParameterSource();
         List<Card> Ads = jdbcTemplate.query(AdsSql, AdsParams, cardExtractor);

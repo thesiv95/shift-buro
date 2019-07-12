@@ -1,5 +1,6 @@
 package ftc.shift.sample.repositories;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import ftc.shift.sample.exception.BadRequestException;
 import ftc.shift.sample.exception.NotFoundException;
 import ftc.shift.sample.models.Card;
@@ -32,7 +33,6 @@ public class DatabaseCardRepository implements CardRepository {
 
     @Autowired
     private CardExtractor cardExtractor;
-
     public void initialize() {
         // Подразумевается, что H2 работает в in-memory режиме и таблицы необходимо создавать при каждом старте приложения
         // SQL запросы для создания таблиц       ;
@@ -54,7 +54,6 @@ public class DatabaseCardRepository implements CardRepository {
     }
 
 
-
     // Загрузить все карточки
     public List<Card> getAllCards() {
         String sql = "select * from ADS";
@@ -65,28 +64,49 @@ public class DatabaseCardRepository implements CardRepository {
         return all;
     }
     public void updateStatus(Integer userid, Integer cardid) {
-        Boolean check = getCard(cardid).getStatus();
-        if(check == getCard(cardid).getStatus())
-            throw new BadRequestException("статусы совпадают");
         if (userid == getCard(cardid).getOwnerId())
             throw new BadRequestException("самому себе меняешь");
+        Boolean newStatus = !(getCard(cardid).getStatus());
         String updateCardStatusSql = "UPDATE ADS SET STATUS = "
-                + getCard(cardid).getStatus() + " WHERE ID = " + cardid;
-
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("id", cardid)
-                .addValue("status", getCard(cardid).getStatus());
-
+                + newStatus + " WHERE ID = " + cardid;
+        MapSqlParameterSource params = new MapSqlParameterSource();
         jdbcTemplate.update(updateCardStatusSql, params);
     }
 
 
 
     private Boolean checkCard(Card card) {
-        if (card.getPrice() == null || card.getStatus() == null || card.getType() == null ||
+        if (card.getStatus() == null || card.getType() == null ||
             card.getTask() == null || card.getCity() == null || card.getDescription() == null ||
-            card.getPhone() == null || card.getOwnerId() == null || card.getOwnerName() == null)
+            card.getPhone() == null || card.getOwnerId() == null || card.getOwnerName() == null ||
+            card.getPrice() < 50 || !checkPhone(card.getPhone()))
             return false;
+        else return true;
+    }
+
+    private Boolean checkPhone(String string) {
+
+        if (Character.toString(string.charAt(0)).equals("+") && Character.toString(string.charAt(1)).equals("7") && string.length() == 12)
+            return true;
+        else throw new BadRequestException("Телефон задан некорректно");
+    }
+
+    private Boolean userBalanceIsValid (Card card, User user) {
+        if (card.getType().equals("Предложение"))
+            return true;
+        String sql = "SELECT * FROM ADS WHERE ADS.OWNER_ID=:id";
+        Integer ownerId = card.getOwnerId();
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("id", ownerId);
+        List<Card> cards = jdbcTemplate.query(sql, params, cardExtractor);
+        Integer totalCount = card.getPrice();
+        for (int i = 0; i < cards.size(); i++) {
+            if (cards.get(i).getType().equals("Просьба"))
+                if(cards.get(i).getStatus() == true)
+                totalCount += cards.get(i).getPrice();
+        }
+        if (totalCount > user.getBalance())
+            throw new BadRequestException("У тебя не хватает денег");
         else return true;
     }
 
@@ -94,17 +114,12 @@ public class DatabaseCardRepository implements CardRepository {
         if (!checkCard(card))
             throw new BadRequestException("объявление задано некорректно");
         if (card.getPrice() < 50)
-            throw new BadRequestException("некорректно задана цена");
-        if (user.getBalance() < card.getPrice())
-            throw new BadRequestException("У вас недостаточно денег");
-        else {
+            throw new BadRequestException("слишком дешево");
+        if (userBalanceIsValid(card, user)) {
             String insertUserSql = "INSERT INTO ADS (TYPE, TASK, OWNER_NAME, PHONE, CITY, DESCRIPTION, PRICE, STATUS, OWNER_ID)" +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
             KeyHolder holder = new GeneratedKeyHolder();
-
             jdbcTemplate.getJdbcTemplate().update(new PreparedStatementCreator() {
-
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection)
                         throws SQLException {
@@ -118,11 +133,10 @@ public class DatabaseCardRepository implements CardRepository {
                     ps.setString(6, card.getDescription());
                     ps.setInt(7, card.getPrice());
                     ps.setBoolean(8, card.getStatus());
-                    ps.setInt(9, card.getOwnerId());
+                    ps.setInt(9, user.getId());
                     return ps;
                 }
             }, holder);
-
             Integer newCardId = holder.getKey().intValue();
             card.setId(newCardId);
         }
@@ -130,16 +144,12 @@ public class DatabaseCardRepository implements CardRepository {
 
     public Card getCard(Integer cardId) {
         String sql = "SELECT * FROM ADS WHERE ADS.ID=:id";
-
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", cardId);
-
         List<Card> cards = jdbcTemplate.query(sql, params, cardExtractor);
-
         if (cards.isEmpty()) {
             throw new NotFoundException("Некорректная карта");
         }
-
         return cards.get(0);
     }
     //
@@ -159,14 +169,10 @@ public class DatabaseCardRepository implements CardRepository {
 
     public List<Card> getTypedCards(String type) {
         String sql = "SELECT * FROM ADS WHERE ADS.TYPE=:type";
-
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("type", type);
-
         List<Card> cards = jdbcTemplate.query(sql, params, cardExtractor);
-
         if (cards.isEmpty()) { return null; }
-
         return cards;
     }
 }

@@ -14,7 +14,7 @@ public class Card {
     @ApiModelProperty(value = "имя владельца", required = true)
     private String ownerName;
 
-    @ApiModelProperty(value = "просьба/помощь", required = true)
+    @ApiModelProperty(value = "просьба/предложение", required = true)
     private String type;
 
     @ApiModelProperty(value = "название", required = true)

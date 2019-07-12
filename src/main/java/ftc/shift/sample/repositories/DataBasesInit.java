@@ -48,7 +48,6 @@ public class DataBasesInit {
             cardDB.initialize();
         }
 
-
         // Demo-data
         String[] cities = new String[]{"Москва", "Санкт-Петербург", "Новосибирск"};
 
