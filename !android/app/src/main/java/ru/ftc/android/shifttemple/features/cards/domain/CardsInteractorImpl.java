@@ -42,12 +42,17 @@ public final class CardsInteractorImpl implements CardsRepository, CardsInteract
     }
 
     @Override
-    public void createCard(Card card, Carry<Card> carry) {
+    public void createCard(Card card, Carry<Void> carry) {
         repository.createCard(card, carry);
     }
 
     @Override
     public void deleteCard(String id, Carry<Success> carry) {
         repository.deleteCard(id, carry);
+    }
+
+    @Override
+    public void updateCardStatus(Integer cardId, Integer userId, Carry<Void> carry) {
+        repository.updateCardStatus(cardId, userId, carry);
     }
 }

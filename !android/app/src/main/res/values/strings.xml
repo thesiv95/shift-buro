@@ -8,10 +8,10 @@
     <string-array name="spinnerItems">
         <item>Показать все</item>
         <item>Просьба</item>
-        <item>Помощь</item>
+        <item>Предложение</item>
     </string-array>
     <string-array name="spinerItemsForCreateCard">
         <item>Просьба</item>
-        <item>Помощь</item>
+        <item>Предложение</item>
     </string-array>
 </resources>

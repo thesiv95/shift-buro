@@ -68,7 +68,6 @@ public class CardCreateActivity extends BaseActivity implements CardCreateView{
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showProgress();
                 addCard();
             }
         });
@@ -86,19 +85,14 @@ public class CardCreateActivity extends BaseActivity implements CardCreateView{
 
     @Override
     public void addCard() {
-        Integer ownerId = presenter.getUserId();
-        String ownerName = ownerNameText.getText().toString();
-        String type = spinnerStatus.getSelectedItem().toString();
-        String task = taskText.getText().toString();
-        String description = descriptionText.getText().toString();
-        boolean status = true;
-        Integer price = Integer.valueOf(priceText.getText().toString());
-        String city = cityText.getText().toString();
-        String phone = phoneText.getText().toString();
-
-        Card card = new Card(ownerId,ownerName,type, task, description, status,
-                price, city, phone);
-        presenter.onCreateCardClicked(card);
+        showProgress();
+        Card card = presenter.getCard(ownerNameText, spinnerStatus, taskText, descriptionText,
+                priceText, cityText, phoneText);
+        if (card != null) {
+            presenter.onCreateCardClicked(card);
+        }
+        else
+            hideProgress();
     }
 
     @Override

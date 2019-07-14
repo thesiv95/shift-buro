@@ -29,7 +29,7 @@ public final class CardsDataSourceImpl implements CardsDataSource {
 
     @Override
     public void getInvitationCards(Carry<List<Card>> carry) {
-        cardsApi.getTypedCardList("Помощь").enqueue(new DefaultCallback(carry));
+        cardsApi.getTypedCardList("Предложение").enqueue(new DefaultCallback(carry));
     }
 
     @Override
@@ -43,12 +43,17 @@ public final class CardsDataSourceImpl implements CardsDataSource {
     }
 
     @Override
-    public void createCard(Card card, Carry<Card> carry) {
+    public void createCard(Card card, Carry<Void> carry) {
         cardsApi.addCard(card).enqueue(new DefaultCallback(carry));
     }
 
     @Override
     public void deleteCard(String id, Carry<Success> carry) {
         cardsApi.deleteCard(id).enqueue(new DefaultCallback(carry));
+    }
+
+    @Override
+    public void updateCardStatus(Integer cardId, Integer userId, Carry<Void> carry) {
+        cardsApi.updateCardStatus(cardId, userId).enqueue(new DefaultCallback(carry));
     }
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorTitle">#13B19D</color>
-    <color name="buttonBlue">#066BAF</color>
-    <color name="colorAccent">#D3B705</color>
+    <color name="colorTitle">#11CEC7</color>
+    <color name="buttonBlue">#069BAF</color>
+    <color name="colorAccent">#FDE72A</color>
     <color name="textColor">#000000</color>
-    <color name="colorWindowBackground">#AAD8E4</color>
+    <color name="colorWindowBackground">#FFFFFF</color>
     <color name="colorUserTextViewBlock">#E4EBEB</color>
-    <color name="colorCardTextViewBlock">#818686</color>
+    <color name="colorCardTextViewBlock">#CFCBCB</color>
 </resources>

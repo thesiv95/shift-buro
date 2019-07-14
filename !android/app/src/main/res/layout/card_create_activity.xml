@@ -73,6 +73,7 @@
                 android:layout_weight="2"
                 android:background="@drawable/text_view_ractangle_gray_block"
                 android:ems="10"
+                android:hint="55 символов"
                 android:inputType="textPersonName"
                 android:paddingStart="5dp" />
         </LinearLayout>
@@ -105,6 +106,7 @@
                 android:layout_weight="2"
                 android:background="@drawable/text_view_ractangle_gray_block"
                 android:ems="10"
+                android:hint="55 символов"
                 android:inputType="textPersonName"
                 android:paddingStart="5dp" />
         </LinearLayout>
@@ -137,6 +139,7 @@
                 android:layout_weight="2"
                 android:background="@drawable/text_view_ractangle_gray_block"
                 android:ems="10"
+                android:hint="+79XXXXXXXXX"
                 android:inputType="number|phone"
                 android:paddingStart="5dp" />
         </LinearLayout>
@@ -203,8 +206,9 @@
                 android:layout_weight="2"
                 android:background="@drawable/text_view_ractangle_gray_block"
                 android:ems="10"
-                android:gravity="left|center_vertical"
-                android:inputType="textPersonName"
+                android:gravity="left"
+                android:hint="255 символов"
+                android:inputType="textMultiLine|textPersonName"
                 android:paddingStart="5dp" />
         </LinearLayout>
 
@@ -233,6 +237,7 @@
                 android:layout_weight="2"
                 android:background="@drawable/text_view_ractangle_gray_block"
                 android:ems="10"
+                android:hint="От 50 до 500 баллов"
                 android:inputType="number|textPersonName"
                 android:paddingStart="5dp" />
         </LinearLayout>

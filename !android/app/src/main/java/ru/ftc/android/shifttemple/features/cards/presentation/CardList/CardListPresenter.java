@@ -1,7 +1,5 @@
 package ru.ftc.android.shifttemple.features.cards.presentation.CardList;
 
-import android.util.Log;
-
 import java.util.List;
 
 import ru.ftc.android.shifttemple.features.MvpPresenter;
@@ -10,12 +8,6 @@ import ru.ftc.android.shifttemple.features.cards.domain.model.Card;
 import ru.ftc.android.shifttemple.features.cards.domain.model.Success;
 import ru.ftc.android.shifttemple.features.login.domain.SessionInteractor;
 import ru.ftc.android.shifttemple.network.Carry;
-
-/**
- * Created: samokryl
- * Date: 02.07.18
- * Time: 0:43
- */
 
 final class CardListPresenter extends MvpPresenter<CardListView> {
 
@@ -32,80 +24,34 @@ final class CardListPresenter extends MvpPresenter<CardListView> {
         loadCards();
     }
 
-    protected String getUserInfo() {
-        String userInfo = "";
-        userInfo += "User ID: " + sessionInteractor.getUserId().toString() + "\n";
-        userInfo += "User name: " + sessionInteractor.getUserName() + "\n";
-        userInfo += "User phone: " + sessionInteractor.getUserPhone() + "\n";
-        userInfo += "User City: " + sessionInteractor.getUserCity() + "\n";
-        userInfo += "User Status: " + sessionInteractor.getUserStatus().toString() + "\n";
-        userInfo += "User Description: " + sessionInteractor.getUserDescription() + "\n";
-        userInfo += "User Age: " + sessionInteractor.getUserAge() + "\n";
-        userInfo += "User Balance: " + sessionInteractor.getUserBalance().toString() + "\n";
-        return userInfo;
-    }
-
-    protected String getUserImageUrl() {
+    String getUserImageUrl() {
         return sessionInteractor.getUserPicUrl();
     }
 
-    protected  Integer getUserBalance() {
+    Integer getUserBalance() {
         return sessionInteractor.getUserBalance();
     }
 
+    Integer getUserId() {return  sessionInteractor.getUserId();}
+
     private void loadCards() {
         view.showProgress();
+
         int spinnerPosition = view.getSpinnerItemPosition();
-        onSpinerItemSelected(spinnerPosition);
+        onSpinnerItemSelected(spinnerPosition);
     }
 
-    void onSpinerItemSelected(int position) {
+    void onSpinnerItemSelected(int position) {
         view.showProgress();
         switch (position) {
             case 0:
-                interactor.loadCards(new Carry<List<Card>>() {
-                    @Override
-                    public void onSuccess(List<Card> result) {
-                        view.showCardList(result);
-                        view.hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        view.hideProgress();
-                        view.showError(throwable.getMessage());
-                    }
-                });
+                loadAllCard();
                 break;
             case 1:
-                interactor.loadRequestCards(new Carry<List<Card>>() {
-                    @Override
-                    public void onSuccess(List<Card> result) {
-                        view.showCardList(result);
-                        view.hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        view.hideProgress();
-                        view.showError(throwable.getMessage());
-                    }
-                });
+                loadRequestCards();
                 break;
             case 2:
-                interactor.loadInvitationCards(new Carry<List<Card>>() {
-                    @Override
-                    public void onSuccess(List<Card> result) {
-                        view.showCardList(result);
-                        view.hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        view.hideProgress();
-                        view.showError(throwable.getMessage());
-                    }
-                });
+                loadInvitationCards();
                 break;
             default:
                 view.hideProgress();
@@ -113,14 +59,12 @@ final class CardListPresenter extends MvpPresenter<CardListView> {
         }
     }
 
-    void onCardSelected(Card card) {
-        view.showProgress();
-        interactor.loadCard(String.valueOf(card.getId()), new Carry<Card>() {
-
+    private void loadAllCard() {
+        interactor.loadCards(new Carry<List<Card>>() {
             @Override
-            public void onSuccess(Card result) {
+            public void onSuccess(List<Card> result) {
+                view.showCardList(result);
                 view.hideProgress();
-                // do something
             }
 
             @Override
@@ -128,29 +72,70 @@ final class CardListPresenter extends MvpPresenter<CardListView> {
                 view.hideProgress();
                 view.showError(throwable.getMessage());
             }
-
         });
     }
 
-    void onCardLongClicked(Card card) {
-        view.showProgress();
-        interactor.deleteCard(String.valueOf(card.getId()), new Carry<Success>() {
+    private void loadRequestCards() {
+        interactor.loadRequestCards(new Carry<List<Card>>() {
+            @Override
+            public void onSuccess(List<Card> result) {
+                view.showCardList(result);
+                view.hideProgress();
+            }
 
             @Override
-            public void onSuccess(Success result) {
+            public void onFailure(Throwable throwable) {
+                view.hideProgress();
+                view.showError(throwable.getMessage());
+            }
+        });
+    }
+
+    private void loadInvitationCards() {
+        interactor.loadInvitationCards(new Carry<List<Card>>() {
+            @Override
+            public void onSuccess(List<Card> result) {
+                view.showCardList(result);
+                view.hideProgress();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                view.hideProgress();
+                view.showError(throwable.getMessage());
+            }
+        });
+    }
+
+    private void updateCardStatus(Card card, Integer userId) {
+        interactor.updateCardStatus(card.getId(), userId, new Carry<Void>() {
+            @Override
+            public void onSuccess(Void v) {
                 loadCards();
             }
 
             @Override
             public void onFailure(Throwable throwable) {
-                view.hideProgress();
                 view.showError(throwable.getMessage());
             }
         });
     }
 
-    public void onAddTaskClicked() {
+    void onAcceptButtonClicked(Card card) {
+        Integer userId = getUserId();
+        updateCardStatus(card, userId);
+    }
+
+    void onAddTaskClicked() {
         view.openCardCreateScreen();
+    }
+
+    void onCardSelected(Card card) {
+        //Your code here
+    }
+
+    void onCardLongClicked(Card card) {
+        //Your code here
     }
 
 }

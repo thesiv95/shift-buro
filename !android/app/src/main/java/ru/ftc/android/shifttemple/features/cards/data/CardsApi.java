@@ -11,12 +11,6 @@ import retrofit2.http.Path;
 import ru.ftc.android.shifttemple.features.cards.domain.model.Card;
 import ru.ftc.android.shifttemple.features.cards.domain.model.Success;
 
-/**
- * Created: samokryl
- * Date: 01.07.18
- * Time: 22:49
- */
-
 public interface CardsApi {
 
     @GET("/cards/getAllCards")
@@ -25,12 +19,14 @@ public interface CardsApi {
     @GET("/cards/getTypedCards/{type}")
     Call<List<Card>> getTypedCardList(@Path("type") String type);
 
-
     @GET("cards/{id}")
     Call<Card> getCard(@Path("id") String id);
 
     @POST("/cards/addCard")
-    Call<Card> addCard(@Body Card card);
+    Call<Void> addCard(@Body Card card);
+
+    @POST("/cards/updateStatus/{cardId}/{userId}")
+    Call<Void> updateCardStatus(@Path("cardId") Integer cardId, @Path("userId") Integer userid);
 
     @DELETE("cards/deleteCard/{id}")
     Call<Success> deleteCard(@Path("id") String id);

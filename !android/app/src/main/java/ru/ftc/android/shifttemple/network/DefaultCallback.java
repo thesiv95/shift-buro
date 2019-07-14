@@ -1,16 +1,11 @@
 package ru.ftc.android.shifttemple.network;
 
+import org.json.JSONObject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ru.ftc.android.shifttemple.exception.EmptyBodyException;
-
-/**
- * Created: samokryl
- * Date: 01.07.18
- * Time: 23:55
- */
-
+import ru.ftc.android.shifttemple.exception.DataBaseException;
 
 public final class DefaultCallback<T> implements Callback<T> {
 
@@ -23,10 +18,17 @@ public final class DefaultCallback<T> implements Callback<T> {
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
         T body = response.body();
-        if (body != null) {
+        if (response.isSuccessful()) {
             carry.onSuccess(body);
-        } else {
-            carry.onFailure(new EmptyBodyException());
+        }
+        else {
+            try {
+                JSONObject jsonObject = new JSONObject(response.errorBody().string());
+                String  errorMessage = jsonObject.getString("message");
+                carry.onFailure(new DataBaseException(errorMessage));
+            } catch (Exception e) {
+                carry.onFailure(e);
+            }
         }
     }
 

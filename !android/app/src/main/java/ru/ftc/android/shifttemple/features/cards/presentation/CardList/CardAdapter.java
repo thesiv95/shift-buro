@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -14,21 +15,17 @@ import java.util.List;
 import ru.ftc.android.shifttemple.R;
 import ru.ftc.android.shifttemple.features.cards.domain.model.Card;
 
-/**
- * Created: samokryl
- * Date: 02.07.18
- * Time: 0:24
- */
-
 final class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardHolder> {
 
     private final List<Card> cards = new ArrayList<>();
     private final LayoutInflater inflater;
     private final SelectCardListener selectCardListener;
+    private CardListView cardListView;
 
-    CardAdapter(Context context, SelectCardListener selectCardListener) {
+    CardAdapter(Context context, SelectCardListener selectCardListener, CardListView cardListView) {
         inflater = LayoutInflater.from(context);
         this.selectCardListener = selectCardListener;
+        this.cardListView = cardListView;
     }
 
     @NonNull
@@ -64,11 +61,13 @@ final class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardHolder> {
         private final TextView CardCityView;
         private final TextView CardDescriptionView;
         private final TextView CardCostView;
+        private final Button acceptButton;
         private final SelectCardListener selectCardListener;
 
         CardHolder(View view, SelectCardListener selectCardListener) {
             super(view);
             this.selectCardListener = selectCardListener;
+
             CardTaskView = view.findViewById(R.id.card_item_task);
             CardStatusView = view.findViewById(R.id.card_item_status);
             CardCategoryView = view.findViewById(R.id.category_content_text_view);
@@ -77,6 +76,7 @@ final class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardHolder> {
             CardCityView = view.findViewById(R.id.city_content_text_view);
             CardDescriptionView = view.findViewById(R.id.description_content_text_view);
             CardCostView = view.findViewById(R.id.cost_text_view);
+            acceptButton = view.findViewById(R.id.accept_button);
         }
 
         void bind(final Card card) {
@@ -103,20 +103,27 @@ final class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardHolder> {
             CardDescriptionView.setText(description);
             CardCostView.setText(cost);
 
-            /*itemView.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     selectCardListener.onCardSelect(card);
                 }
-            });*/
+            });
 
-            /*itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     selectCardListener.onCardLongClick(card);
                     return true;
                 }
-            });*/
+            });
+
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cardListView.onAcceptButtonClick(card);
+                }
+            });
 
         }
 

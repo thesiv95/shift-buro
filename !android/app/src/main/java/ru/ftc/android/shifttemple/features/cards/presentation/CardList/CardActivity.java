@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -17,7 +15,6 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.ftc.android.shifttemple.R;
@@ -27,12 +24,6 @@ import ru.ftc.android.shifttemple.features.MvpPresenter;
 import ru.ftc.android.shifttemple.features.MvpView;
 import ru.ftc.android.shifttemple.features.cards.domain.model.Card;
 import ru.ftc.android.shifttemple.features.cards.presentation.CardCreate.CardCreateActivity;
-
-/**
- * Created: samokryl
- * Date: 01.07.18
- * Time: 22:49
- */
 
 public class CardActivity extends BaseActivity implements CardListView {
 
@@ -56,7 +47,7 @@ public class CardActivity extends BaseActivity implements CardListView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.books_activity);
 
-        //Hide the title bar.
+        //Hide title bar.
         getSupportActionBar().hide();
 
         initView();
@@ -87,15 +78,12 @@ public class CardActivity extends BaseActivity implements CardListView {
 
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                // your code here
-                String message = String.valueOf(position);
-                Log.e("tag", message);
-                presenter.onSpinerItemSelected(position);
+                presenter.onSpinnerItemSelected(position);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
+                //Your code here
             }
 
         });
@@ -110,7 +98,7 @@ public class CardActivity extends BaseActivity implements CardListView {
             public void onCardLongClick(Card card) {
                 presenter.onCardLongClicked(card);
             }
-        });
+        }, this);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -121,15 +109,12 @@ public class CardActivity extends BaseActivity implements CardListView {
     public void showProgress() {
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-        //       WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     @Override
     public void hideProgress() {
         progressBar.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
-        //getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     @Override
@@ -140,20 +125,14 @@ public class CardActivity extends BaseActivity implements CardListView {
     @Override
     public void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-
-        //Toast.makeText(this, presenter.getUserInfo(), Toast.LENGTH_LONG).show();
-        List<Card> list = new ArrayList<>();
-        list.add(new Card(1,"Иван","Просьба", "Прошу погулять с моей собакой", "Описание", true,
-                10, "Новосибирск", "89123456789"));
-        list.add(new Card(1,"Федор","Просьба", "Прошу застрелить моего соседа", "Описание", true,
-                10, "Москва", "89123456789"));
-        list.add(new Card(1,"Петр","Предложение", "Прошу погулять с моей собакой", "Описание", true,
-                10, "Иркутск", "89123456789"));
-        adapter.setCards(list);
     }
 
     public int getSpinnerItemPosition() {
         return spinner.getSelectedItemPosition();
+    }
+
+    public void onAcceptButtonClick(Card card) {
+        presenter.onAcceptButtonClicked(card);
     }
 
     @Override

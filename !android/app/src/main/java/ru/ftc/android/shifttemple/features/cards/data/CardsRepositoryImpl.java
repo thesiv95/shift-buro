@@ -41,10 +41,15 @@ public final class CardsRepositoryImpl implements CardsRepository {
     }
 
     @Override
-    public void createCard(Card card, Carry<Card> carry) { dataSource.createCard(card, carry);
+    public void createCard(Card card, Carry<Void> carry) { dataSource.createCard(card, carry);
     }
 
     @Override
     public void deleteCard(String id, Carry<Success> carry) { dataSource.deleteCard(id, carry);
+    }
+
+    @Override
+    public void updateCardStatus(Integer cardId, Integer userId, Carry<Void> carry) {
+        dataSource.updateCardStatus(cardId, userId, carry);
     }
 }

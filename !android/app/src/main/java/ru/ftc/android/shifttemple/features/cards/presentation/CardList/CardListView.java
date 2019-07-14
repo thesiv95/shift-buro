@@ -24,4 +24,6 @@ interface CardListView extends MvpView {
     void openCardCreateScreen();
 
     int getSpinnerItemPosition();
+
+    void onAcceptButtonClick(Card card);
 }

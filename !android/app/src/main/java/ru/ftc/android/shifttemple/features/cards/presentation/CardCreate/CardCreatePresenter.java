@@ -1,6 +1,7 @@
 package ru.ftc.android.shifttemple.features.cards.presentation.CardCreate;
 
-import android.view.View;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import ru.ftc.android.shifttemple.features.MvpPresenter;
 import ru.ftc.android.shifttemple.features.cards.domain.CardsInteractor;
@@ -19,14 +20,14 @@ final class CardCreatePresenter extends MvpPresenter<CardCreateView> {
 
     @Override
     protected void onViewReady() {
-        //
+        //Your code here
     }
 
     public void onCreateCardClicked(Card card) {
-        interactor.createCard(card, new Carry<Card>() {
+        interactor.createCard(card, new Carry<Void>() {
 
             @Override
-            public void onSuccess(Card result) {
+            public void onSuccess(Void v) {
                 view.hideProgress();
                 view.showSuccess("Добвалено");
                 view.finishActivity();
@@ -41,8 +42,41 @@ final class CardCreatePresenter extends MvpPresenter<CardCreateView> {
         });
     }
 
-    protected Integer getUserId() {
-        return sessionInteractor.getUserId();
+    protected Card getCard(EditText ownerNameText, Spinner spinnerStatus, EditText taskText, EditText descriptionText,
+                               EditText priceText, EditText cityText, EditText phoneText) {
+
+        if (!cardInfoIsCorrect(ownerNameText, taskText, descriptionText, priceText, cityText, phoneText)) {
+            view.showError("Заполните все поля");
+            Card card = null;
+            return card;
+        }
+
+        Integer ownerId = sessionInteractor.getUserId();
+        String ownerName = ownerNameText.getText().toString();
+        String type = spinnerStatus.getSelectedItem().toString();
+        String task = taskText.getText().toString();
+        String description = descriptionText.getText().toString();
+        boolean status = true;
+        Integer price = Integer.valueOf(priceText.getText().toString());
+        String city = cityText.getText().toString();
+        String phone = phoneText.getText().toString();
+
+        Card card = new Card(ownerId,ownerName,type, task, description, status,
+                price, city, phone);
+
+        return card;
+    }
+
+    private boolean cardInfoIsCorrect(EditText ownerNameText, EditText taskText, EditText descriptionText,
+                          EditText priceText, EditText cityText, EditText phoneText) {
+        if (ownerNameText.getText().length() == 0 || taskText.getText().length() == 0 ||
+            descriptionText.getText().length() == 0 || priceText.getText().length() == 0 ||
+            cityText.getText().length() == 0 || phoneText.getText().length() == 0){
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
     public void finishActivity() {

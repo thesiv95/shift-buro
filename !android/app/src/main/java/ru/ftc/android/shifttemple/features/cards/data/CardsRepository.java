@@ -22,7 +22,10 @@ public interface CardsRepository {
 
     void loadCard(String id, Carry<Card> carry);
 
-    void createCard(Card card, Carry<Card> carry);
+    void createCard(Card card, Carry<Void> carry);
 
     void deleteCard(String id, Carry<Success> carry);
+
+    void updateCardStatus(Integer cardId, Integer userID, Carry<Void> carry);
+
 }

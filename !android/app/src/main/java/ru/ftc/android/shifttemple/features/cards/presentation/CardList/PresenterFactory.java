@@ -9,19 +9,12 @@ import ru.ftc.android.shifttemple.features.cards.data.CardsDataSourceImpl;
 import ru.ftc.android.shifttemple.features.cards.data.CardsRepository;
 import ru.ftc.android.shifttemple.features.cards.data.CardsRepositoryImpl;
 import ru.ftc.android.shifttemple.features.cards.domain.CardsInteractorImpl;
-import ru.ftc.android.shifttemple.features.cards.presentation.CardList.CardListPresenter;
 import ru.ftc.android.shifttemple.features.login.data.SessionDataSource;
 import ru.ftc.android.shifttemple.features.login.data.SessionDataSourceImpl;
 import ru.ftc.android.shifttemple.features.login.data.SessionRepository;
 import ru.ftc.android.shifttemple.features.login.data.SessionRepositoryImpl;
 import ru.ftc.android.shifttemple.features.login.domain.SessionInteractor;
 import ru.ftc.android.shifttemple.features.login.domain.SessionInteractorImpl;
-
-/**
- * Created: samokryl
- * Date: 02.07.18
- * Time: 1:03
- */
 
 final class PresenterFactory {
 
